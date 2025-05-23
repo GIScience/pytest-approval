@@ -1,0 +1,14 @@
+reporters = [
+    [
+        "diff",
+        "--unified",
+        "--color",
+        "--suppress-common-lines",
+        "--label",
+        "received",
+        "--label",
+        "approved",
+        "%received",
+        "%approved",
+    ],
+]

@@ -1,0 +1,39 @@
+[project]
+name = "pytest-approval"
+version = "0.1.0"
+description = "A simple approval library utilizing external diff programs such as PyCharm, Visual Studio Code or Vim."
+readme = "README.md"
+authors = [
+    { name = "Matthias Schaub", email = "matthias.schaub@posteo.de" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pytest>=8.3.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-subprocess>=1.5.3",
+    "ruff>=0.11.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.build-backend]
+module-root = ""
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle Error
+    "F",    # Pyflakes
+    "I",    # isort
+    "N",    # pep8-nameing
+    "Q",    # flake8-quotes
+    "W",    # pycodestyle Warning
+    "C90",  # mccabe
+]

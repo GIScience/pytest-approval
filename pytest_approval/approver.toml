@@ -1,0 +1,23 @@
+approvers = [
+    [
+        "meld",
+        "%received",
+        "%approved"
+    ],
+    [
+        "/usr/bin/flatpak",
+        "run",
+        "com.jetbrains.PyCharm-Community",
+        "diff",
+        "%received",
+        "%approved"
+    ],
+    [
+        "alacritty",
+        "--command",
+        "nvim",
+        "-d",
+        "%received",
+        "%approved"
+    ],
+]

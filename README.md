@@ -1,0 +1,134 @@
+# README
+
+A simple approval library utilizing external diff programs such as
+PyCharm and Visual Studio Code.
+
+## About
+
+Approval tests capture the output (snapshot) of a piece of code and compare it
+with a previously approved version of the output.
+
+It's most useful in environments where frequent changes are expected or where
+the output is of a complex nature but can be easily verified by humans, aided for
+example by a diff-tool or a visual representation of the output.
+
+Once the output has been *approved* then as long as the output stays the same
+the test will pass. A test fails if the *received* output is not identical to
+the approved version. In that case, the difference between the received and the
+approved output is reported to the tester.
+
+For outputs that can be represented by text, a report can be as simple as
+printing the difference to the terminal. Using diff programs with a graphical
+user interface such as PyCharm or Visual Studio Coder as *reporter* not
+only helps to visualize the difference, but they can also be used as *approver*
+by applying the changes of the received output to the approved output.
+
+Not all data can or should be represented by text. In many cases an
+image is the best and most easily verifiable representation. PyCharm works also
+with images.
+
+> A picture’s worth a 1000 tests.
+
+
+## Requirements
+
+OS
+- Linux/Unix
+- MacOS
+
+One of following programs installed:
+- PyCharm
+- Visual Studio Code
+- Meld
+- GNU Diffutils (`diff`)
+
+
+## Installation
+
+```bash
+uv add pytest-approval
+```
+
+
+## Usage
+
+Verify text:
+
+```python
+from pytest_approval import verify
+
+
+def test_verify_string()
+    assert verify("Hello World!")
+
+
+def test_verify_dict()
+    assert verify(json.dumps({"msg": "Hello World!"}), extension=".json")
+```
+
+
+Verify binary files such as an image:
+
+```python
+from pytest_approval import  verify_binary
+
+
+def test_verify_binary(image):
+    with open("my_image.jpg", "rb") as file:
+        buffer = file.read()
+    assert verify_binary(buffer, extension=".jpg")
+```
+
+<!-- TODO: How to Srub sensitive data. -->
+<!-- TODO: Add example of paramatrized fixture. -->
+
+<!-- ## Configuration -->
+<!---->
+<!-- ### Approver/Reporter -->
+<!---->
+<!-- Per default `pytest-approval` tries a list of diff programs as reporters until a working one is found. -->
+<!---->
+<!-- You can provide your own list in the `pyproject.toml` file: -->
+<!---->
+<!-- ```toml -->
+<!-- [tool.pytest-approval] -->
+<!-- reporters = [ -->
+<!--     [ -->
+<!--         "meld", -->
+<!--         "%received", -->
+<!--         "%approved", -->
+<!--     ], -->
+<!--     [ -->
+<!--         "diff", -->
+<!--         "--unified", -->
+<!--         "--color", -->
+<!--         "--suppress-common-lines", -->
+<!--         "--label", -->
+<!--         "received", -->
+<!--         "--label", -->
+<!--         "approved", -->
+<!--         "%received", -->
+<!--         "%approved", -->
+<!--     ], -->
+<!-- ] -->
+<!-- ``` -->
+<!---->
+<!-- This list will be put in front of the [list of default reporters](pytest_approval/definitions.py). -->
+
+## Alternatives
+
+*[Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.* 
+
+<!-- Approval happens though passing a command line argument `--snapshot-update` to pytest. Syrupy has not built-in diff reporter for images (See issues [#886](https://github.com/syrupy-project/syrupy/issues/886) and [#566](https://github.com/syrupy-project/syrupy/issues/566). -->
+
+*[Approvaltests](https://github.com/approvals/ApprovalTests.Python) is an open source assertion/verification library to aid testing.*
+
+<!-- better default namer. if run with pytest namer takes nodeid into account and works with parametrized tests out of the box-->
+<!-- Default behavior is to go through a list of reporters until one is found -->
+<!-- Better list of reporters -->
+<!-- Blocking behouver -->
+<!-- If diff tool approves test is green imidiatly and received file is removed imidiatly not just after the next run -->
+<!-- No HTTP request during testing to fetch empty binary files  -->
+<!-- Less code -->
+<!-- No dependencies -->
+<!-- Modern python project (uv and ruff) -->
