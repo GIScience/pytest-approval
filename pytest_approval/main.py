@@ -30,12 +30,11 @@ def verify_json(
     extension: Literal[".json"] = ".json",
     sort: bool = False,
 ) -> bool:
+    if isinstance(data, str):
+        data = json.loads(data)
     if sort:
-        if isinstance(data, str):
-            data = json.loads(data)
         data = sort_dict(data)
-    if isinstance(data, dict):
-        data = json.dumps(data)
+    data = json.dumps(data, indent=True)
     return _verify(data, extension)
 
 
