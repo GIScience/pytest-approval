@@ -2,6 +2,7 @@ import filecmp
 import logging
 import os
 import shutil
+import json
 import subprocess
 from pathlib import Path
 from typing import Any, Literal
@@ -12,6 +13,7 @@ from pytest_approval.definitions import (
     REPORTERS_BINARY,
     REPORTERS_TEXT,
 )
+from pytest_approval.utils import sort_dict
 
 
 def verify(data: Any, *, extension: str = ".txt") -> bool:
@@ -19,6 +21,21 @@ def verify(data: Any, *, extension: str = ".txt") -> bool:
 
 
 def verify_binary(data: Any, *, extension: Literal[BINARY_EXTENSIONS]) -> bool:
+    return _verify(data, extension)
+
+
+def verify_json(
+    data: str | dict,
+    *,
+    extension: Literal[".json"] = ".json",
+    sort: bool = False,
+) -> bool:
+    if sort:
+        if isinstance(data, str):
+            data = json.loads(data)
+        data = sort_dict(data)
+    if isinstance(data, dict):
+        data = json.dumps(data)
     return _verify(data, extension)
 
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from pytest_approval import verify, verify_binary
+from pytest_approval import verify, verify_binary, verify_json
 from pytest_approval.definitions import (
     BINARY_EXTENSIONS,
     REPORTERS_BINARY,
@@ -47,6 +47,22 @@ def test_verify():
 def test_verify_string(reporter, string, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
     assert verify(string)
+
+
+@pytest.mark.parametrize(
+    "json",
+    (
+        {"b": 100, "a": None},
+        '{"b": 100, "a": null}',
+    ),
+)
+def test_verify_json(json):
+    assert verify_json(json)
+
+
+def test_verify_json_sort():
+    json = {"b": 100, "a": {"d": 10, "c": 10}}
+    assert verify_json(json, sort="True")
 
 
 # TODO read empty files for extension and verify it:
