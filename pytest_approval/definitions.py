@@ -10,12 +10,12 @@ REPORTERS_TEXT: list[list[str]] = [
         "%received",
         "%approved",
     ],
-    # [
-    #     "pycharm",
-    #     "diff",
-    #     "%received",
-    #     "%approved",
-    # ],
+    [
+        "pycharm",
+        "diff",
+        "%received",
+        "%approved",
+    ],
     [
         "/usr/bin/flatpak",
         "run",
@@ -32,50 +32,50 @@ REPORTERS_TEXT: list[list[str]] = [
         "%received",
         "%approved",
     ],
-    # [
-    #     "/usr/bin/open",
-    #     # -W: Wait until the application is closed
-    #     "-W",
-    #     # -n: new instance
-    #     "-n",
-    #     # -a: application
-    #     "-a",
-    #     "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",  # noqa
-    #     "--args",
-    #     "diff",
-    #     "%received",
-    #     "%approved",
-    # ],
-    # [
-    #     "/usr/bin/open",
-    #     # -W: Wait until the application is closed
-    #     "-W",
-    #     # -n: New instance
-    #     "-n",
-    #     # -a: Application
-    #     "-a",
-    #     "/Applications/PyCharm CE.app/Contents/MacOS/pycharm",
-    #     "--args",
-    #     "diff",
-    #     "%received",
-    #     "%approved",
-    # ],
-    # [
-    #     "/usr/bin/open",
-    #     # -W: Wait until the application is closed
-    #     "-W",
-    #     # -n: New instance
-    #     "-n",
-    #     # -a: Application
-    #     "-a",
-    #     "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",  # noqa
-    #     "--args",
-    #     "--new-window",
-    #     "--wait",
-    #     "--diff",
-    #     "%received",
-    #     "%approved",
-    # ],
+    [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: new instance
+        "-n",
+        # -a: application
+        "-a",
+        "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",  # noqa
+        "--args",
+        "diff",
+        "%received",
+        "%approved",
+    ],
+    [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: New instance
+        "-n",
+        # -a: Application
+        "-a",
+        "/Applications/PyCharm CE.app/Contents/MacOS/pycharm",
+        "--args",
+        "diff",
+        "%received",
+        "%approved",
+    ],
+    [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: New instance
+        "-n",
+        # -a: Application
+        "-a",
+        "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",  # noqa
+        "--args",
+        "--new-window",
+        "--wait",
+        "--diff",
+        "%received",
+        "%approved",
+    ],
     [
         "diff",
         "--unified",
@@ -92,12 +92,12 @@ REPORTERS_TEXT: list[list[str]] = [
 
 
 REPORTERS_BINARY: list[list[str]] = [
-    # [
-    #     "pycharm",
-    #     "diff",
-    #     "%received",
-    #     "%approved",
-    # ],
+    [
+        "pycharm",
+        "diff",
+        "%received",
+        "%approved",
+    ],
     [
         "/usr/bin/flatpak",
         "run",
