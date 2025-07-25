@@ -1,8 +1,6 @@
 import filecmp
 from pathlib import Path
-from PIL import Image
 import logging
-import numpy
 
 from pytest_approval.definitions import BINARY_EXTENSIONS
 
@@ -19,6 +17,14 @@ def compare_files(received: Path, approved: Path) -> bool:
 
 def compare_image_contents_only(received: Path, approved: Path) -> bool:
     """Compare image contents without metadata."""
+    try:
+        import numpy
+        from PIL import Image
+    except ImportError as error:
+        raise RuntimeError(
+            'To use content_only, please install "pytest-approval[image]"'
+            + '\n\n\tpip install "pytest-approval[image]"'
+        ) from error
     received_image = Image.open(received)
     approved_image = Image.open(approved)
     return bool((numpy.array(received_image) == numpy.array(approved_image)).all())

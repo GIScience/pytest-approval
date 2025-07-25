@@ -140,12 +140,16 @@ wheels = [
 
 [[package]]
 name = "pytest-approval"
-version = "0.3.0"
+version = "0.4.0"
 source = { editable = "." }
 dependencies = [
+    { name = "pytest" },
+]
+
+[package.optional-dependencies]
+image = [
     { name = "numpy" },
     { name = "pillow" },
-    { name = "pytest" },
 ]
 
 [package.dev-dependencies]
@@ -156,10 +160,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "numpy", specifier = ">=2.3.1" },
-    { name = "pillow", specifier = ">=11.3.0" },
+    { name = "numpy", marker = "extra == 'image'", specifier = ">=2.3.1" },
+    { name = "pillow", marker = "extra == 'image'", specifier = ">=11.3.0" },
     { name = "pytest", specifier = ">=8.3.5" },
 ]
+provides-extras = ["image"]
 
 [package.metadata.requires-dev]
 dev = [
