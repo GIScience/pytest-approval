@@ -1,11 +1,12 @@
-import filecmp
+import json
 import logging
 import os
 import shutil
-import json
 import subprocess
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal
+
+from pytest_approval.compare import compare_files, compare_image_contents_only
 
 from pytest_approval.definitions import (
     BASE_DIR,
@@ -16,11 +17,35 @@ from pytest_approval.definitions import (
 from pytest_approval.utils import sort_dict
 
 
-def verify(data: Any, *, extension: str = ".txt") -> bool:
+def verify(
+    data: Any,
+    *,
+    extension: str = ".txt",
+) -> bool:
     return _verify(data, extension)
 
 
-def verify_binary(data: Any, *, extension: Literal[BINARY_EXTENSIONS]) -> bool:
+def verify_binary(
+    data: Any,
+    *,
+    extension: Literal[BINARY_EXTENSIONS],
+) -> bool:
+    return _verify(data, extension)
+
+
+def verify_image(
+    data: Any,
+    *,
+    extension: Literal[".jpg", ".jpeg", ".png"],
+    content_only: bool = False,
+) -> bool:
+    """Verify image.
+
+    Args:
+        content_only: only compare content without metadata.
+    """
+    if content_only:
+        return _verify(data, extension, compare=compare_image_contents_only)
     return _verify(data, extension)
 
 
@@ -38,15 +63,15 @@ def verify_json(
     return _verify(data, extension)
 
 
-def _verify(data: Any, extension: str) -> bool:
+def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved)
-    if _compare(received, approved):
+    if compare(received, approved):
         received.unlink()
         return True
     else:
         _report(received, approved)
-        if _compare(received, approved):
+        if compare(received, approved):
             received.unlink()
             return True
         else:
@@ -113,15 +138,6 @@ def _name(extension=".txt") -> tuple[Path]:
         Path(received).resolve(),
         Path(approved).resolve(),
     )
-
-
-def _compare(received: Path, approved: Path) -> bool:
-    if filecmp.cmp(received, approved, shallow=False):
-        return True
-    elif received.suffix not in BINARY_EXTENSIONS:
-        return approved.read_text() == received.read_text()
-    else:
-        return False
 
 
 def _report(received: Path, approved: Path):
