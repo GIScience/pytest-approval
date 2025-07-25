@@ -28,7 +28,7 @@ def verify(
 def verify_binary(
     data: Any,
     *,
-    extension: Literal[BINARY_EXTENSIONS],
+    extension: Literal[".jpg", ".jpeg", ".png"],
 ) -> bool:
     return _verify(data, extension)
 
@@ -81,30 +81,38 @@ def _verify(data: Any, extension: str, compare: Callable = compare_files) -> boo
 def _write(data, received, approved):
     """Write received to disk and create empty approved file if not exists."""
     if received.suffix in BINARY_EXTENSIONS:
-        with open(received, "wb") as file:
-            file.write(data)
-        if not approved.exists():
-            empty_file = Path(BASE_DIR / "empty_files" / "empty").with_suffix(
-                approved.suffix
-            )
-            try:
-                shutil.copy(empty_file, approved)
-            except FileNotFoundError:
-                raise ValueError(
-                    "Extension '{0}' not supported. ".format(approved.suffix)
-                    + "Extension for binary verification must be one of: {0}".format(
-                        BINARY_EXTENSIONS
-                    )
-                )
+        _write_binary(data, received, approved)
     else:
-        if len(data) == 0 or data[-1] != "\n":
-            data = data + "\n"
-        received.write_text(data)
-        if not approved.exists():
-            approved.touch()
+        _write_text(data, received, approved)
 
 
-def _name(extension=".txt") -> tuple[Path]:
+def _write_binary(data, received, approved):
+    with open(received, "wb") as file:
+        file.write(data)
+    if not approved.exists():
+        empty_file = Path(BASE_DIR / "empty_files" / "empty").with_suffix(
+            approved.suffix
+        )
+        try:
+            shutil.copy(empty_file, approved)
+        except FileNotFoundError:
+            raise ValueError(
+                "Extension '{0}' not supported. ".format(approved.suffix)
+                + "Extension for binary verification must be one of: {0}".format(
+                    BINARY_EXTENSIONS
+                )
+            )
+
+
+def _write_text(data, received, approved):
+    if len(data) == 0 or data[-1] != "\n":
+        data = data + "\n"
+    received.write_text(data)
+    if not approved.exists():
+        approved.touch()
+
+
+def _name(extension=".txt") -> tuple[Path, Path]:
     # TODO: support base dir (then rewrite tests to use tmp_dir)
     # TODO: support postfix (write test with multiple calls to verify)
     # Write paramatrized tests
