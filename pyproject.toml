@@ -1,6 +1,6 @@
 [project]
 name = "pytest-approval"
-version = "0.4.0"
+version = "0.5.0"
 description = "A simple approval library utilizing external diff programs such as PyCharm, Visual Studio Code or Vim."
 readme = "README.md"
 authors = [
