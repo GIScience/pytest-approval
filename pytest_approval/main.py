@@ -110,8 +110,11 @@ def _name(extension=".txt") -> tuple[Path]:
     # Write paramatrized tests
     # TODO: Try out with xdist
     node_id = os.environ["PYTEST_CURRENT_TEST"]
+    parts = node_id.split("::")
+    parts[-1] = parts[-1].replace("/", "--")
     file_path = (
-        node_id.replace(" (call)", "")
+        "::".join(parts)
+        .replace(" (call)", "")
         .replace(" (setup)", "")
         .replace(" (teardown)", "")
         .replace("::", "--")

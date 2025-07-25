@@ -35,8 +35,9 @@ def approved_different():
     yield approved
 
 
-def test_verify():
-    assert verify("Hello World!")
+@pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
+def test_verify(string):
+    assert verify(string)
 
 
 @pytest.mark.parametrize("reporter", REPORTERS_TEXT[:-1])
