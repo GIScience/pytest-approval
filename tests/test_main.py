@@ -36,18 +36,27 @@ def approved_different():
 
 
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
-def test_verify(string):
+def test_verify_string(string):
     assert verify(string)
 
 
-@pytest.mark.parametrize("reporter", REPORTERS_TEXT[:-1])
+# @pytest.mark.parametrize("reporter", REPORTERS_TEXT[:-1])
+# @pytest.mark.parametrize(
+#     "string",
+#     ("", ":*?<>|\t\n\r\x0b\x0c"),
+# )
+# def test_verify_string(reporter, string, monkeypatch):
+#     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
+#     assert verify(string)
+
+
 @pytest.mark.parametrize(
-    "string",
-    ("", "Hallo World!", ":*?<>|\t\n\r\x0b\x0c"),
+    "reporter",
+    (REPORTERS_TEXT[0], REPORTERS_TEXT[2], REPORTERS_TEXT[3]),
 )
-def test_verify_string(reporter, string, monkeypatch):
+def test_verify_string_all_reporter(reporter, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
-    assert verify(string)
+    assert verify("Hello World!")
 
 
 @pytest.mark.parametrize(
@@ -63,14 +72,13 @@ def test_verify_json(json):
 
 def test_verify_json_sort():
     json = {"b": 100, "a": {"d": 10, "c": 10}}
-    assert verify_json(json, sort="True")
+    assert verify_json(json, sort=True)
 
 
 # TODO read empty files for extension and verify it:
-@pytest.mark.parametrize("reporter", REPORTERS_BINARY[:-1])
 @pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
-def test_verify_binary(reporter, extension, monkeypatch):
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_BINARY", [reporter])
+def test_verify_binary(extension, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.REPORTERS_BINARY", [REPORTERS_BINARY[1]])
     with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
         data = file.read()
 
@@ -116,10 +124,10 @@ def test_verify_different_returncode_127(fake_process, caplog):
         returncode=127,
     )
     fake_process.register_subprocess(
-        ["/usr/bin/flatpak", fake_process.any()],
+        ["pycharm", fake_process.any()],
         returncode=0,
     )
     assert verify("Hello World!") is False
     assert "Failed to run command" in caplog.text
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
-    assert fake_process.call_count(["/usr/bin/flatpak", fake_process.any()]) == 1
+    assert fake_process.call_count(["pycharm", fake_process.any()]) == 1

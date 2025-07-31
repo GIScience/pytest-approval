@@ -1,5 +1,6 @@
 import json
 import logging
+import zlib
 import os
 import shutil
 import subprocess
@@ -115,34 +116,24 @@ def _write_text(data, received, approved):
 def _name(extension=".txt") -> tuple[Path, Path]:
     # TODO: support base dir (then rewrite tests to use tmp_dir)
     # TODO: support postfix (write test with multiple calls to verify)
-    # Write paramatrized tests
     # TODO: Try out with xdist
     node_id = os.environ["PYTEST_CURRENT_TEST"]
-    parts = node_id.split("::")
-    parts[-1] = parts[-1].replace("/", "--")
+    if "[" in node_id and "]" in node_id:
+        # TODO: Only use hash if params are loo long or special chars are presenet
+        start = node_id.index("[") + 1
+        end = node_id.index("]")
+        params = node_id[start:end]
+        hash = str(zlib.crc32(params.encode("utf-8")))
+    else:
+        params = ""
+        hash = ""
     file_path = (
-        "::".join(parts)
-        .replace(" (call)", "")
+        node_id.replace(" (call)", "")
         .replace(" (setup)", "")
         .replace(" (teardown)", "")
         .replace("::", "--")
+        .replace(params, hash)
     )
-    chars = [
-        ":",
-        "*",
-        "?",
-        "<",
-        ">",
-        "|",
-        r"\\",
-        r"\t",
-        r"\n",
-        r"\r",
-        r"\x0b",
-        r"\x0c",
-    ]
-    for c in chars:
-        file_path = file_path.replace(c, "-")
     received = file_path + ".received" + extension
     approved = file_path + ".approved" + extension
     return (

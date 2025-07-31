@@ -11,3 +11,5 @@ wheels/
 
 .pytest_cache
 .ruff_cache
+
+*.received.txt
