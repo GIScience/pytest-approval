@@ -6,15 +6,10 @@ readme = "README.md"
 authors = [
     { name = "Matthias Schaub", email = "matthias.schaub@posteo.de" }
 ]
+classifiers = ["Framework :: Pytest"]
 requires-python = ">=3.13"
 dependencies = [
     "pytest>=8.3.5",
-]
-
-[project.optional-dependencies]
-image = [
-    "numpy>=2.3.1",
-    "pillow>=11.3.0"
 ]
 
 [dependency-groups]
@@ -23,6 +18,14 @@ dev = [
     "ruff>=0.11.10",
 ]
 
+[project.optional-dependencies]
+image = [
+    "numpy>=2.3.1",
+    "pillow>=11.3.0"
+]
+
+[project.entry-points.pytest11]
+pytest_approval = "pytest_approval.plugin"
 
 [build-system]
 requires = ["hatchling"]
