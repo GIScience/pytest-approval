@@ -40,6 +40,12 @@ def test_verify_string(string):
     assert verify(string)
 
 
+def test_verify_multiple_calls():
+    """Test multiple calls to verify. File names should be numbered."""
+    assert verify("foo")
+    assert verify("bar")
+
+
 # @pytest.mark.parametrize("reporter", REPORTERS_TEXT[:-1])
 # @pytest.mark.parametrize(
 #     "string",

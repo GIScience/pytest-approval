@@ -17,6 +17,8 @@ from pytest_approval.definitions import (
 )
 from pytest_approval.utils import sort_dict
 
+NAMES = []
+
 
 def verify(
     data: Any,
@@ -134,8 +136,14 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         .replace("::", "--")
         .replace(params, hash)
     )
-    received = file_path + ".received" + extension
-    approved = file_path + ".approved" + extension
+    NAMES.append(file_path)
+    count = str(NAMES.count(file_path))
+    if count == "1":
+        count = ""
+    else:
+        count = "." + count
+    received = file_path + count + ".received" + extension
+    approved = file_path + count + ".approved" + extension
     return (
         Path(received).resolve(),
         Path(approved).resolve(),
