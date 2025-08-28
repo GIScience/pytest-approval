@@ -1,11 +1,10 @@
 [project]
 name = "pytest-approval"
 version = "0.8.0"
-description = "A simple approval library utilizing external diff programs such as PyCharm, Visual Studio Code or Vim."
+description = "A simple approval tests library utilizing external diff programs."
 readme = "README.md"
-authors = [
-    { name = "Matthias Schaub", email = "matthias.schaub@posteo.de" }
-]
+license = "LGPL-3.0-only"
+authors = [{email="ohsome@heigit.org"}]
 classifiers = ["Framework :: Pytest"]
 requires-python = ">=3.12"
 dependencies = [
