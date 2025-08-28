@@ -8,8 +8,7 @@ node_ids = []
 @pytest.hookimpl
 def pytest_collection_modifyitems(items):
     global node_ids
-    for i in items:
-        node_ids.extend(i.nodeid)
+    node_ids.extend(items)
 
 
 def pytest_sessionfinish(session, exitstatus):
