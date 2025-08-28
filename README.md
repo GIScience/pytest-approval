@@ -1,11 +1,11 @@
 # README
 
-A simple approval library utilizing external diff programs such as
-PyCharm and Visual Studio Code.
+A simple approval test library utilizing external diff programs such as
+PyCharm and Visual Studio Code to compare approved and received output.
 
 ## About
 
-Approval tests capture the output (snapshot) of a piece of code and compare it
+Approval tests capture the output (a snapshot) of a piece of code and compare it
 with a previously approved version of the output.
 
 It's most useful in environments where frequent changes are expected or where
@@ -24,8 +24,7 @@ only helps to visualize the difference, but they can also be used as *approver*
 by applying the changes of the received output to the approved output.
 
 Not all data can or should be represented by text. In many cases an
-image is the best and most easily verifiable representation. PyCharm works also
-with images.
+image is the best and most easily verifiable representation. PyCharm and Visual Studio Code can work with images as well.
 
 > A picture’s worth a 1000 tests.
 
@@ -46,7 +45,7 @@ One of following programs installed:
 ## Installation
 
 ```bash
-uv add pytest-approval
+uv add git+https://git.sr.ht/~talfus-laddus/pytest-approval
 ```
 
 
@@ -55,7 +54,7 @@ uv add pytest-approval
 Verify text:
 
 ```python
-from pytest_approval import verify
+from pytest_approval import verify, verify_json
 
 
 def test_verify_string()
@@ -63,7 +62,8 @@ def test_verify_string()
 
 
 def test_verify_dict()
-    assert verify(json.dumps({"msg": "Hello World!"}), extension=".json")
+    # automatic conversion to JSON
+    assert verify_json({"msg": "Hello World!"})
 ```
 
 
@@ -78,9 +78,6 @@ def test_verify_binary(image):
         buffer = file.read()
     assert verify_binary(buffer, extension=".jpg")
 ```
-
-<!-- TODO: How to Srub sensitive data. -->
-<!-- TODO: Add example of paramatrized fixture. -->
 
 <!-- ## Configuration -->
 <!---->
@@ -126,7 +123,7 @@ def test_verify_binary(image):
 <!-- better default namer. if run with pytest namer takes nodeid into account and works with parametrized tests out of the box-->
 <!-- Default behavior is to go through a list of reporters until one is found -->
 <!-- Better list of reporters -->
-<!-- Blocking behouver -->
+<!-- Blocking behavior -->
 <!-- If diff tool approves test is green imidiatly and received file is removed imidiatly not just after the next run -->
 <!-- No HTTP request during testing to fetch empty binary files  -->
 <!-- Less code -->

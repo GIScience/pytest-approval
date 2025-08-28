@@ -1,17 +1,21 @@
 # Inbox
 
 - [ ] ! Detect which approval/received files are not used when running the whole test suite. Support automatic removal of those files.
-- [ ] Use proper assertionError for better context
+- [ ] Run in auto-approve mode. 
+  - This could be a solution for previous task as well. Remove all cassettes and run in auto-approve mode
+  - Implement via cli flag. 
+  - Useful if one does refactoring in tests (e.g. renaming).
 - [ ] Support approval directory setting by user
 - [ ] Support user config (in contrast to project config). A developer's preferred approver might be different from the next developer.
-- [ ] Support iOS
+- [ ] Support MacOS
 - [ ] Make detailed comparison w/ code between this plugin and Syrupy and Apporvaltesting.
-- [ ] Add binary flag to reporters to denote if they can open binary.
-- [ ] Integrate image compare -> How should user be able to choose compare method?
+- [ ] Add binary flag to reporters to denote if they can open binary
+  - User preferred reporter might differ depending of file type.
 - [ ] Add geojson verify wich generate a link to geojson.io and shows only the link in diff tool
 - [ ] Make image comperator optional (because of dependencies)
-- [ ] Use hash in filename for pytest parametrized test only if a certain number of characters are reach or special characters are in use.
-- [ ] autoapproval support via cli flag. Useful if one does refactoring in tests (e.g. renaming).
+- [ ] Use hash in filename for pytest parametrized test only if a certain number of characters are reach or special characters are in use
+- [ ] Support scrubbing of sensitive or always changing data (like timestamp) data
+  - might not be necessary to support, since this can always be done by the user before passing data to verify
 
 
 ## Done
