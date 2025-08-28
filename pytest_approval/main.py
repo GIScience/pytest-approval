@@ -1,14 +1,13 @@
 import json
 import logging
-import zlib
 import os
 import shutil
 import subprocess
+import zlib
 from pathlib import Path
 from typing import Any, Callable, Literal
 
 from pytest_approval.compare import compare_files, compare_image_contents_only
-
 from pytest_approval.definitions import (
     BASE_DIR,
     BINARY_EXTENSIONS,
@@ -98,13 +97,13 @@ def _write_binary(data, received, approved):
         )
         try:
             shutil.copy(empty_file, approved)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             raise ValueError(
                 "Extension '{0}' not supported. ".format(approved.suffix)
                 + "Extension for binary verification must be one of: {0}".format(
                     BINARY_EXTENSIONS
                 )
-            )
+            ) from e
 
 
 def _write_text(data, received, approved):
@@ -138,10 +137,7 @@ def _name(extension=".txt") -> tuple[Path, Path]:
     )
     NAMES.append(file_path)
     count = str(NAMES.count(file_path))
-    if count == "1":
-        count = ""
-    else:
-        count = "." + count
+    count = "" if count == "1" else "." + count
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
@@ -159,13 +155,13 @@ def _report(received: Path, approved: Path):
         command = [c.replace("%received", str(received)) for c in command]
         command = [c.replace("%approved", str(approved)) for c in command]
         try:
-            completed_process = subprocess.run(
+            completed_process = subprocess.run(  # noqa S603
                 command,
                 capture_output=True,
                 check=False,
             )
             if completed_process.returncode == 127:  # command not found
-                raise FileNotFoundError()
+                raise FileNotFoundError()  # noqa: TRY301
         except FileNotFoundError:
             logging.debug(f"Failed to run command `{' '.join(command)}` as approver.")
             continue
@@ -179,4 +175,4 @@ def _report(received: Path, approved: Path):
             raise AssertionError(msg + completed_process.stdout.decode("utf-8"))
         else:
             continue
-    raise FileNotFoundError("No working approver could be found.")
+    raise FileNotFoundError("No working approver could be found.")  # noqa: TRY003

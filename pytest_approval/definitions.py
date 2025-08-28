@@ -1,3 +1,4 @@
+from contextlib import suppress
 from pathlib import Path
 
 from pytest_approval.config import _read_config
@@ -40,7 +41,7 @@ REPORTERS_TEXT: list[list[str]] = [
         "-n",
         # -a: application
         "-a",
-        "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",  # noqa
+        "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",
         "--args",
         "diff",
         "%received",
@@ -68,7 +69,7 @@ REPORTERS_TEXT: list[list[str]] = [
         "-n",
         # -a: Application
         "-a",
-        "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",  # noqa
+        "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",
         "--args",
         "--new-window",
         "--wait",
@@ -173,7 +174,5 @@ BINARY_EXTENSIONS: list[str] = [
 
 CONFIG = _read_config()
 
-try:
+with suppress(KeyError):
     REPORTERS_TEXT = list(set(CONFIG["reporters"] + REPORTERS_TEXT))
-except KeyError:
-    pass

@@ -1,6 +1,6 @@
 import filecmp
-from pathlib import Path
 import logging
+from pathlib import Path
 
 from pytest_approval.definitions import BINARY_EXTENSIONS
 

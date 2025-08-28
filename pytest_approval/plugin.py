@@ -9,7 +9,7 @@ node_ids = []
 def pytest_collection_modifyitems(items):
     global node_ids
     for i in items:
-        node_ids.append(i.nodeid)
+        node_ids.extend(i.nodeid)
 
 
 def pytest_sessionfinish(session, exitstatus):
@@ -24,7 +24,7 @@ def pytest_sessionfinish(session, exitstatus):
     else:
         logging.debug("Whole test suite has been targeted. Start cleanup.")
     # TODO:
-        # 1. Search for all approve/received files
-        # 2. Generate file names for each node_id
-        # 3. Delete all approved/received files (1)
-            # which are not part of generated files names (2)
+    # 1. Search for all approve/received files
+    # 2. Generate file names for each node_id
+    # 3. Delete all approved/received files (1)
+    # which are not part of generated files names (2)

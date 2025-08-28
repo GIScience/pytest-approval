@@ -1,5 +1,6 @@
+import filecmp
+
 from PIL import Image, PngImagePlugin
-import numpy as np
 
 
 # Create two simple black and white images with different sizes
@@ -21,6 +22,5 @@ def create_test_images():
 
 
 create_test_images()
-import filecmp
 
 print(filecmp.cmp("image1.png", "image2.png", shallow=False))

@@ -3,8 +3,10 @@ import tomllib
 from pathlib import Path
 
 
-def _find_config(path: Path = Path.cwd()) -> Path | None:
+def _find_config(path: Path | None = None) -> Path | None:
     """Recursively walk up to root from current working dir to find pyproject.toml"""
+    if path is None:
+        path = Path.cwd()
     if str(path) == path.root:
         logging.debug("No pyproject.toml found.")
         return None
