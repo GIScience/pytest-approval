@@ -135,15 +135,26 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         .replace("::", "--")
         .replace(params, hash)
     )
-    NAMES.append(file_path)
-    count = str(NAMES.count(file_path))
-    count = "" if count == "1" else "." + count
+    count = _count(file_path)
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
         Path(received).resolve(),
         Path(approved).resolve(),
     )
+
+
+def _count(file_path: str) -> str:
+    """Count generated names which are the same.
+
+    This means `verify` has been called multiple times in one test function.
+    """
+    NAMES.append(file_path)
+    count = NAMES.count(file_path)
+    if count == 1:
+        return ""
+    else:
+        return "." + str(count)
 
 
 def _report(received: Path, approved: Path):

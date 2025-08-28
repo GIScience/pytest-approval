@@ -15,20 +15,19 @@ FIXTURE_DIR = Path(__file__).parent / "fixtures"
 
 
 @pytest.fixture
-def approved():
+def approved(monkeypatch):
+    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
     received, approved = _name()
     with open(approved, "w") as file:
         file.write("Hello World!\n")
     yield approved
-    try:
-        received.unlink()
-        approved.unlink()
-    except FileNotFoundError:
-        pass
+    received.unlink(missing_ok=True)
+    approved.unlink(missing_ok=True)
 
 
 @pytest.fixture
-def approved_different():
+def approved_different(monkeypatch):
+    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
     received, approved = _name()
     with open(approved, "w") as file:
         file.write("hello world")
