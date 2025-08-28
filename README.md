@@ -44,8 +44,8 @@ One of following programs installed:
 
 ## Installation
 
-```bash
-uv add git+https://git.sr.ht/~talfus-laddus/pytest-approval
+```sh
+uv add git+https://github.com/GIScience/asyncpg-recorder.git
 ```
 
 
@@ -111,6 +111,13 @@ def test_verify_binary(image):
 <!-- ``` -->
 <!---->
 <!-- This list will be put in front of the [list of default reporters](pytest_approval/definitions.py). -->
+
+## Development
+
+```sh
+uv sync --all-extras
+uv run pytest
+```
 
 ## Alternatives
 
