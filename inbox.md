@@ -12,7 +12,6 @@
 - [ ] Add binary flag to reporters to denote if they can open binary
   - User preferred reporter might differ depending of file type.
 - [ ] Add geojson verify wich generate a link to geojson.io and shows only the link in diff tool
-- [ ] Make image comperator optional (because of dependencies)
 - [ ] Use hash in filename for pytest parametrized test only if a certain number of characters are reach or special characters are in use
 - [ ] Support scrubbing of sensitive or always changing data (like timestamp) data
   - might not be necessary to support, since this can always be done by the user before passing data to verify
@@ -21,3 +20,4 @@
 ## Done
 - [x] Detect if verify is called multiple times in one test function and generate unique names or at least warn the user.
   - [x] Namer should support multiple calls of verify in one test case
+- [x] Make image comperator optional (because of dependencies)
