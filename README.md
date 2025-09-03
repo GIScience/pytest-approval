@@ -24,9 +24,10 @@ only helps to visualize the difference, but they can also be used as *approver*
 by applying the changes of the received output to the approved output.
 
 Not all data can or should be represented by text. In many cases an
-image is the best and most easily verifiable representation. PyCharm and Visual Studio Code can work with images as well.
+image is the best and most easily verifiable representation.
+PyCharm and Visual Studio Code can work with images as well.
 
-> A picture’s worth a 1000 tests.
+> A picture’s worth a 1000 tests ([approvaltests.com](https://approvaltests.com/)).
 
 
 ## Requirements
@@ -125,11 +126,12 @@ This project uses [CalVer](https://calver.org/).
 
 Format is: `YYYY.MM.DD` (E.g `2025.9.2`).
 
-In case of releasing twice on one day add a micro number starting with 1: `YYYY.MM.DD_micro` (E.g. `2025.9.2_1`).
+In case of releasing twice on one day add a micro number starting with 1:
+`YYYY.MM.DD_micro` (E.g. `2025.9.2_1`).
 
 ## Alternatives
 
-*[Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.* 
+*[Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.*
 
 <!-- Approval happens though passing a command line argument `--snapshot-update` to pytest. Syrupy has not built-in diff reporter for images (See issues [#886](https://github.com/syrupy-project/syrupy/issues/886) and [#566](https://github.com/syrupy-project/syrupy/issues/566). -->
 
