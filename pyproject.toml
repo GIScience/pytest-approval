@@ -36,6 +36,8 @@ module-root = ""
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+addopts = "--approved-dir=tests/approved"
+
 [tool.ruff.lint]
 select = [
     "E",    # pycodestyle Error
