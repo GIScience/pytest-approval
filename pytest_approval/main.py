@@ -16,6 +16,8 @@ from pytest_approval.definitions import (
 )
 from pytest_approval.utils import sort_dict
 
+ROOT_DIR: str = ""
+
 NAMES = []
 
 
@@ -139,8 +141,8 @@ def _name(extension=".txt") -> tuple[Path, Path]:
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
-        Path(received).resolve(),
-        Path(approved).resolve(),
+        Path(ROOT_DIR) / Path(received),
+        Path(ROOT_DIR) / Path(approved),
     )
 
 

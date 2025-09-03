@@ -2,8 +2,12 @@ import logging
 
 import pytest
 
+from pytest_approval import main
+
 node_ids = []
 
+def pytest_configure(config):
+    main.ROOT_DIR = config.rootpath
 
 @pytest.hookimpl
 def pytest_collection_modifyitems(items):
