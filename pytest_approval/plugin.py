@@ -5,9 +5,18 @@ import pytest
 from pytest_approval import main
 
 node_ids = []
+auto_approve: bool = False
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--auto-approve",
+        action="store_true",
+        help="Automatically approve every approval test",
+    )
 
 def pytest_configure(config):
     main.ROOT_DIR = config.rootpath
+    main.AUTO_APPROVE = config.getoption("--auto-approve")
 
 @pytest.hookimpl
 def pytest_collection_modifyitems(items):
