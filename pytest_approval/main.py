@@ -17,6 +17,7 @@ from pytest_approval.definitions import (
 from pytest_approval.utils import sort_dict
 
 ROOT_DIR: str = ""
+APPROVED_DIR: str = ""
 AUTO_APPROVE: bool = False
 
 NAMES = []
@@ -141,11 +142,26 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         .replace(params, hash)
     )
     count = _count(file_path)
+    if APPROVED_DIR:
+            approved_dir_path = Path(APPROVED_DIR)
+            file_path = Path(file_path)
+
+            common_base = None
+            for base in approved_dir_path.parents:
+                if base in file_path.parents:
+                    common_base = base
+                    break
+
+            if common_base is None:
+                file_path = str(file_path)
+            else:
+                diverging_part = file_path.relative_to(common_base)
+                file_path = str(diverging_part)
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
-        Path(ROOT_DIR) / Path(received),
-        Path(ROOT_DIR) / Path(approved),
+        Path(ROOT_DIR) / Path(APPROVED_DIR) / Path(received),
+        Path(ROOT_DIR) / Path(APPROVED_DIR) / Path(approved),
     )
 
 
