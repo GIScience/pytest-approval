@@ -1,4 +1,5 @@
 import logging
+import re
 from pathlib import Path
 
 import pytest
@@ -93,15 +94,12 @@ def test_verify_binary(extension, monkeypatch):
 def test_verify_gnu_diff_tools_approver(monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [REPORTERS_TEXT[-1]])
     with pytest.raises(AssertionError) as error:
-        assert verify("Hello World!")
-    expected = r"""Received is different from approved.
-To approve run mv --force /home/matthias/projects/pytest-approval/tests/test_main.py--test_verify_gnu_diff_tools_approver.received.txt /home/matthias/projects/pytest-approval/tests/test_main.py--test_verify_gnu_diff_tools_approver.approved.txt
---- received
-+++ approved
-@@ -1 +0,0 @@
--Hello World!
-"""  # noqa
-    assert expected == str(error.value)
+        assert verify("Hello World!") # noqa
+    monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", REPORTERS_TEXT)
+    pattern = r'/([^\s]+)pytest-approval/'
+    replacement = 'path/to/repo/pytest-approval/'
+    error_string = re.sub(pattern, replacement, str(error.value))
+    assert verify(error_string)
 
 
 def test_verify_approved_equal(approved, fake_process):
