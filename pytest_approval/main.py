@@ -17,6 +17,7 @@ from pytest_approval.definitions import (
 from pytest_approval.utils import sort_dict
 
 ROOT_DIR: str = ""
+AUTO_APPROVE: bool = False
 
 NAMES = []
 
@@ -70,6 +71,8 @@ def verify_json(
 def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved)
+    if AUTO_APPROVE:
+        shutil.copyfile(received, approved)
     if compare(received, approved):
         received.unlink()
         return True

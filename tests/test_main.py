@@ -34,6 +34,13 @@ def approved_different(monkeypatch):
         file.write("hello world")
     yield approved
 
+@pytest.fixture
+def path(monkeypatch):
+    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
+    received, approved = _name()
+    yield approved
+    approved.unlink(missing_ok=True)
+
 
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
 def test_verify_string(string):
@@ -134,3 +141,27 @@ def test_verify_different_returncode_127(fake_process, caplog):
     assert "Failed to run command" in caplog.text
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
     assert fake_process.call_count(["pycharm", fake_process.any()]) == 1
+
+
+def test_hello_default(monkeypatch, path):
+    monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", True)
+    assert not path.exists()
+    assert verify("new content")
+    assert path.exists()
+
+
+pytest_plugins = ["pytester"]
+
+def test_auto_approval(pytester):
+    pytester.makepyfile(
+        """
+        from pytest_approval import verify
+        def test_hello_default(path):
+            assert verify(path)
+    """
+    )
+
+    # run all tests with pytest
+    result = pytester.runpytest("--auto-approve")
+
+    result.assert_outcomes(passed=1)
