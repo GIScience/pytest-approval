@@ -143,7 +143,7 @@ def test_verify_different_returncode_127(fake_process, caplog):
     assert fake_process.call_count(["pycharm", fake_process.any()]) == 1
 
 
-def test_hello_default(monkeypatch, path):
+def test_auto_approval(monkeypatch, path):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", True)
     assert not path.exists()
     assert verify("new content")

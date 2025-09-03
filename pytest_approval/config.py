@@ -12,7 +12,6 @@ def _find_config(path: Path | None = None) -> Path | None:
         return None
     config_path = path / "pyproject.toml"
     if config_path.exists():
-        logging.debug(f"pyproject.toml found at {str(config_path)}")
         return config_path
     else:
         return _find_config(path.parent)

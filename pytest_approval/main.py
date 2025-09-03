@@ -16,6 +16,7 @@ from pytest_approval.definitions import (
 )
 from pytest_approval.utils import sort_dict
 
+# will be instantiated during pytest configuration by plugin.py
 ROOT_DIR: str = ""
 APPROVED_DIR: str = ""
 AUTO_APPROVE: bool = False
