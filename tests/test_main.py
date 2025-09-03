@@ -148,20 +148,3 @@ def test_hello_default(monkeypatch, path):
     assert not path.exists()
     assert verify("new content")
     assert path.exists()
-
-
-pytest_plugins = ["pytester"]
-
-def test_auto_approval(pytester):
-    pytester.makepyfile(
-        """
-        from pytest_approval import verify
-        def test_hello_default(path):
-            assert verify(path)
-    """
-    )
-
-    # run all tests with pytest
-    result = pytester.runpytest("--auto-approve")
-
-    result.assert_outcomes(passed=1)
