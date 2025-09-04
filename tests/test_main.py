@@ -34,6 +34,7 @@ def approved_different(monkeypatch):
         file.write("hello world")
     yield approved
 
+
 @pytest.fixture
 def path(monkeypatch):
     monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
@@ -101,10 +102,10 @@ def test_verify_binary(extension, monkeypatch):
 def test_verify_gnu_diff_tools_approver(monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [REPORTERS_TEXT[-1]])
     with pytest.raises(AssertionError) as error:
-        assert verify("Hello World!") # noqa
+        assert verify("Hello World!")
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", REPORTERS_TEXT)
-    pattern = r'/([^\s]+)pytest-approval/'
-    replacement = 'path/to/repo/pytest-approval/'
+    pattern = r"/([^\s]+)pytest-approval/"
+    replacement = "path/to/repo/pytest-approval/"
     error_string = re.sub(pattern, replacement, str(error.value))
     assert verify(error_string)
 
