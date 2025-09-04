@@ -12,4 +12,4 @@ def test_find_config():
 
 
 def test_read_config():
-    assert config._read_config() == {}
+    assert config._read_config() == {'approved-dir': 'tests/approved'}
