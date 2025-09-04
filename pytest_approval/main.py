@@ -20,8 +20,10 @@ from pytest_approval.utils import sort_dict
 ROOT_DIR: str = ""
 APPROVED_DIR: str = ""
 AUTO_APPROVE: bool = False
+CLEAN_UNUSED = False
 
 NAMES = []
+USED_FILES = []
 
 
 def verify(
@@ -72,6 +74,8 @@ def verify_json(
 
 def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
     received, approved = _name(extension)
+    if CLEAN_UNUSED:
+        USED_FILES.append(approved)
     _write(data, received, approved)
     if AUTO_APPROVE:
         shutil.copyfile(received, approved)
@@ -210,14 +214,10 @@ def _report(received: Path, approved: Path):
 
 def cleaner(path: Path):
     path = Path(path)
+    used_files = [file_path.name for file_path in USED_FILES]
     if path.is_dir():
-        for dirpath, _, filenames in os.walk(path):
+        for dirpath, dirnames, filenames in os.walk(path):
             for filename in filenames:
-                #filename = str(Path(filename).name)
-                if ".approved." in filenames and filename not in NAMES:
-                    file_path = os.path.join(dirpath, filename)
-                    try:
-                        os.remove(file_path)
-                        print(f"Deleted: {file_path}")
-                    except Exception as e:
-                        print(f"Error deleting {file_path}: {e}")
+                if filename not in used_files:
+                    file_path = Path(dirpath, filename)
+                    file_path.unlink(missing_ok=True)

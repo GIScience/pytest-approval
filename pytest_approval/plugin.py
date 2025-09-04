@@ -12,11 +12,17 @@ def pytest_addoption(parser):
         action="store_true",
         help="Automatically approve every approval test",
     )
+    parser.addoption(
+        "--clean-unused",
+        action="store_true",
+        help="Remove all files in the approved directory, that are not used in this test run.",
+    )
 
 
 def pytest_configure(config):
     main.ROOT_DIR = config.rootpath
     main.AUTO_APPROVE = config.getoption("--auto-approve")
+    main.CLEAN_UNUSED = config.getoption("--clean-unused")
     approved_dir = CONFIG.get("approved-dir", None)
     if approved_dir is not None:
         main.APPROVED_DIR = approved_dir
@@ -24,4 +30,5 @@ def pytest_configure(config):
         approved_dir_path.mkdir(parents=True, exist_ok=True)
 
 def pytest_sessionfinish(session, exitstatus):
-    main.cleaner(Path(main.ROOT_DIR) / Path(main.APPROVED_DIR))
+    if main.CLEAN_UNUSED:
+        main.cleaner(Path(main.ROOT_DIR) / Path(main.APPROVED_DIR))
