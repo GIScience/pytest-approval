@@ -22,3 +22,6 @@ def pytest_configure(config):
         main.APPROVED_DIR = approved_dir
         approved_dir_path = Path(main.ROOT_DIR) / Path(main.APPROVED_DIR)
         approved_dir_path.mkdir(parents=True, exist_ok=True)
+
+def pytest_sessionfinish(session, exitstatus):
+    main.cleaner(Path(main.ROOT_DIR) / Path(main.APPROVED_DIR))

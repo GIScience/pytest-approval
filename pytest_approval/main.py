@@ -206,3 +206,18 @@ def _report(received: Path, approved: Path):
         else:
             continue
     raise FileNotFoundError("No working approver could be found.")  # noqa: TRY003
+
+
+def cleaner(path: Path):
+    path = Path(path)
+    if path.is_dir():
+        for dirpath, _, filenames in os.walk(path):
+            for filename in filenames:
+                #filename = str(Path(filename).name)
+                if ".approved." in filenames and filename not in NAMES:
+                    file_path = os.path.join(dirpath, filename)
+                    try:
+                        os.remove(file_path)
+                        print(f"Deleted: {file_path}")
+                    except Exception as e:
+                        print(f"Error deleting {file_path}: {e}")
