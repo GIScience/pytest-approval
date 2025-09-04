@@ -80,6 +80,20 @@ def test_verify_binary(image):
     assert verify_binary(buffer, extension=".jpg")
 ```
 
+If you want to save the approved files in a specific directory, set the variable approved-dir in your pyproject.toml.
+The path should be relative to pyproject.toml.
+
+```toml
+[tool.asyncpg-recorder]
+"approved-dir"="tests/approved"
+```
+
+To automatically approve all results, set the flag --auto_approve.
+
+```shell
+uv run pytest --auto-approve
+```
+
 <!-- ## Configuration -->
 <!---->
 <!-- ### Approver/Reporter -->
