@@ -162,7 +162,7 @@ wheels = [
 
 [[package]]
 name = "pytest-approval"
-version = "0.8.0"
+version = "2025.9.4"
 source = { editable = "." }
 dependencies = [
     { name = "pytest" },
