@@ -10,7 +10,7 @@ from pytest_approval.definitions import (
     REPORTERS_BINARY,
     REPORTERS_TEXT,
 )
-from pytest_approval.main import _name
+from pytest_approval.main import _name, USED_FILES, cleaner
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
 
@@ -42,6 +42,20 @@ def path(monkeypatch):
     yield approved
     approved.unlink(missing_ok=True)
 
+@pytest.fixture
+def preserve_used_files():
+    original = USED_FILES.copy()
+    yield
+    USED_FILES.clear()
+    USED_FILES.extend(original)
+
+@pytest.fixture
+def cleaner_test_dir(tmp_path):
+    # Create test directory with some files
+    files = ["keep1.txt", "keep2.txt", "remove1.txt", "remove2.txt"]
+    for fname in files:
+        (tmp_path / fname).write_text(f"Content of {fname}")
+    return tmp_path
 
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
 def test_verify_string(string):
@@ -153,3 +167,14 @@ def test_auto_approval(monkeypatch, path):
     assert not path.exists()
     assert verify("new content")
     assert path.exists()
+
+def test_cleaner_removes_unused_files(cleaner_test_dir, preserve_used_files):
+    USED_FILES.clear()
+    USED_FILES.extend([
+        cleaner_test_dir / "keep1.txt",
+        cleaner_test_dir / "keep2.txt"
+    ])
+    cleaner(cleaner_test_dir)
+
+    assert sorted(f.name for f in cleaner_test_dir.iterdir()) == ["keep1.txt", "keep2.txt"]
+

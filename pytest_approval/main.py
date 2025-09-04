@@ -20,8 +20,10 @@ from pytest_approval.utils import sort_dict
 ROOT_DIR: str = ""
 APPROVED_DIR: str = ""
 AUTO_APPROVE: bool = False
+CLEAN_UNUSED = False
 
 NAMES = []
+USED_FILES = []
 
 
 def verify(
@@ -72,6 +74,8 @@ def verify_json(
 
 def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
     received, approved = _name(extension)
+    if CLEAN_UNUSED:
+        USED_FILES.append(approved)
     _write(data, received, approved)
     if AUTO_APPROVE:
         shutil.copyfile(received, approved)
@@ -206,3 +210,14 @@ def _report(received: Path, approved: Path):
         else:
             continue
     raise FileNotFoundError("No working approver could be found.")  # noqa: TRY003
+
+
+def cleaner(path: Path):
+    path = Path(path)
+    used_files = [file_path.name for file_path in USED_FILES]
+    if path.is_dir():
+        for dirpath, dirnames, filenames in os.walk(path):
+            for filename in filenames:
+                if filename not in used_files:
+                    file_path = Path(dirpath, filename)
+                    file_path.unlink(missing_ok=True)
