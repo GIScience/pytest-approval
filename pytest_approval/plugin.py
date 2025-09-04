@@ -16,6 +16,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     main.ROOT_DIR = config.rootpath
+    main.AUTO_APPROVE = config.getoption("--auto-approve")
     approved_dir = CONFIG.get("approved-dir", None)
     if approved_dir is not None:
         main.APPROVED_DIR = approved_dir
