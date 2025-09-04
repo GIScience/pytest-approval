@@ -100,6 +100,7 @@ def test_verify_binary(extension, monkeypatch):
 
 
 def test_verify_gnu_diff_tools_approver(monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [REPORTERS_TEXT[-1]])
     with pytest.raises(AssertionError) as error:
         assert verify("Hello World!")
@@ -116,19 +117,22 @@ def test_verify_approved_equal(approved, fake_process):
     assert fake_process.call_count(["meld", fake_process.any()]) == 0
 
 
-def test_verify_approved_different(approved_different, fake_process):
+def test_verify_approved_different(approved_different, fake_process, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is False
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
 
 
-def test_verify_approved_none(fake_process):
+def test_verify_approved_none(fake_process, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is False
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
 
 
-def test_verify_different_returncode_127(fake_process, caplog):
+def test_verify_different_returncode_127(fake_process, caplog, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     caplog.set_level(logging.DEBUG)
     fake_process.register_subprocess(
         ["meld", fake_process.any()],
