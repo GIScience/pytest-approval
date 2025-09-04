@@ -144,20 +144,17 @@ def _name(extension=".txt") -> tuple[Path, Path]:
     )
     count = _count(file_path)
     if APPROVED_DIR:
-        approved_dir_path = Path(APPROVED_DIR)
         file_path = Path(file_path)
-
-        common_base = None
-        for base in approved_dir_path.parents:
-            if base in file_path.parents:
-                common_base = base
+        # find common parents between approved dir and file path, both
+        # relative to pytest root, and remove them
+        for i, part in enumerate(Path(APPROVED_DIR).parts):
+            if part == file_path.parts[i]:
+                continue
+            else:
                 break
-
-        if common_base is None:
-            file_path = str(file_path)
         else:
-            diverging_part = file_path.relative_to(common_base)
-            file_path = str(diverging_part)
+            i = 0
+        file_path = str(Path(*file_path.parts[i:]))
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
