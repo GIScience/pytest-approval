@@ -84,7 +84,7 @@ If you want to save the approved files in a specific directory, set the variable
 The path should be relative to pyproject.toml.
 
 ```toml
-[tool.asyncpg-recorder]
+[tool.pytest-approval]
 "approved-dir"="tests/approved"
 ```
 
