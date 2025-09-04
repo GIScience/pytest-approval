@@ -141,7 +141,7 @@ This project uses [CalVer](https://calver.org/).
 Format is: `YYYY.MM.DD` (E.g `2025.9.2`).
 
 In case of releasing twice on one day add a micro number starting with 1:
-`YYYY.MM.DD_micro` (E.g. `2025.9.2_1`).
+`YYYY.MM.DD.micro` (E.g. `2025.9.2.1`).
 
 ## Alternatives
 
