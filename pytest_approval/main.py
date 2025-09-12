@@ -16,12 +16,19 @@ from pytest_approval.definitions import (
 )
 from pytest_approval.utils import sort_dict
 
+logger = logging.getLogger(__name__)
+
 # will be instantiated during pytest configuration by plugin.py
 ROOT_DIR: str = ""
 APPROVALS_DIR: str = ""
 AUTO_APPROVE: bool = False
 
 NAMES = []
+
+
+class NoApproverFoundError(FileNotFoundError):
+    def __init__(self):
+        super().__init__("No working approver could be found.")
 
 
 def verify(
@@ -193,7 +200,7 @@ def _report(received: Path, approved: Path):
             if completed_process.returncode == 127:  # command not found
                 raise FileNotFoundError()  # noqa: TRY301
         except FileNotFoundError:
-            logging.debug(f"Failed to run command `{' '.join(command)}` as approver.")
+            logger.debug(f"Failed to run command `{' '.join(command)}` as approver.")
             continue
         if completed_process.returncode == 0:
             return
@@ -204,5 +211,6 @@ def _report(received: Path, approved: Path):
             )
             raise AssertionError(msg + completed_process.stdout.decode("utf-8"))
         else:
+            raise NoApproverFoundError()
             continue
-    raise FileNotFoundError("No working approver could be found.")  # noqa: TRY003
+    raise

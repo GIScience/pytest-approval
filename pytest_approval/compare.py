@@ -4,9 +4,11 @@ from pathlib import Path
 
 from pytest_approval.definitions import BINARY_EXTENSIONS
 
+logger = logging.getLogger(__name__)
+
 
 def compare_files(received: Path, approved: Path) -> bool:
-    logging.debug(f"Compare {received} with {approved}.")
+    logger.debug(f"Compare {received} with {approved}.")
     if filecmp.cmp(received, approved, shallow=False):
         return True
     elif received.suffix not in BINARY_EXTENSIONS:
