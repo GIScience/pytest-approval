@@ -1,6 +1,6 @@
 [project]
 name = "pytest-approval"
-version = "2025.9.4.1"
+version = "2025.9.12"
 description = "A simple approval test library utilizing external diff programs such as PyCharm and Visual Studio Code to compare approved and received output."
 readme = "README.md"
 license = "LGPL-3.0-only"
