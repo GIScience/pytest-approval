@@ -154,6 +154,8 @@ Format is: `YYYY.MM.DD` (E.g `2025.9.2`).
 In case of releasing twice on one day add a micro number starting with 1:
 `YYYY.MM.DD.micro` (E.g. `2025.9.2.1`).
 
+To make a new release run `./scripts/release.sh YYYY.MM.DD`
+
 ## Alternatives
 
 *[Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.*
