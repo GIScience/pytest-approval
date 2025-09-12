@@ -58,4 +58,4 @@ select = [
 "tests/*" = ["S101"]  # S101 usage of asserts
 
 [tool.pytest-approval]
-"approved-dir"="tests/approved"
+"approvals-dir"="tests/approvals"

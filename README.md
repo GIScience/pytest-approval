@@ -80,19 +80,30 @@ def test_verify_binary(image):
     assert verify_binary(buffer, extension=".jpg")
 ```
 
-If you want to save the approved files in a specific directory, set the variable approved-dir in your pyproject.toml.
-The path should be relative to pyproject.toml.
+### Auto approval
 
-```toml
-[tool.pytest-approval]
-"approved-dir"="tests/approved"
-```
-
-To automatically approve all results, set the flag --auto_approve.
-
+It is possible to run auto approve every approval tests:
 ```shell
 uv run pytest --auto-approve
 ```
+
+This is useful for elimination of approval files which are not in use anymore.
+1. Make sure tests are green.
+2. Then remove all approval files.
+3. Run pytest in auto approval mode.
+
+
+## Configuration
+
+Approved and received files are stored next to the test file per default.
+If you want to save those files in a specific directory instead, please set the `approvals-dir` key in your `pyproject.toml`:
+
+```toml
+[tool.pytest-approval]
+"approved-dir"="tests/approvals"  
+```
+
+This path is relative to your pytest root (usually your `pyproject.toml`).
 
 <!-- ## Configuration -->
 <!---->

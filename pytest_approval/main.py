@@ -18,7 +18,7 @@ from pytest_approval.utils import sort_dict
 
 # will be instantiated during pytest configuration by plugin.py
 ROOT_DIR: str = ""
-APPROVED_DIR: str = ""
+APPROVALS_DIR: str = ""
 AUTO_APPROVE: bool = False
 
 NAMES = []
@@ -143,11 +143,11 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         .replace(params, hash)
     )
     count = _count(file_path)
-    if APPROVED_DIR:
+    if APPROVALS_DIR:
         file_path = Path(file_path)
         # find common parents between approved dir and file path, both
         # relative to pytest root, and remove them
-        for i, part in enumerate(Path(APPROVED_DIR).parts):
+        for i, part in enumerate(Path(APPROVALS_DIR).parts):
             if part == file_path.parts[i]:
                 continue
             else:
@@ -158,8 +158,8 @@ def _name(extension=".txt") -> tuple[Path, Path]:
     received = file_path + count + ".received" + extension
     approved = file_path + count + ".approved" + extension
     return (
-        Path(ROOT_DIR) / Path(APPROVED_DIR) / Path(received),
-        Path(ROOT_DIR) / Path(APPROVED_DIR) / Path(approved),
+        Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(received),
+        Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(approved),
     )
 
 

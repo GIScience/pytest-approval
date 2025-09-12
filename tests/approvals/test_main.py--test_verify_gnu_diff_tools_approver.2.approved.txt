@@ -1,0 +1,6 @@
+Received is different from approved.
+To approve run mv --force path/to/repo/pytest-approval/tests/approvals/test_main.py--test_verify_gnu_diff_tools_approver.received.txt path/to/repo/pytest-approval/tests/approvals/test_main.py--test_verify_gnu_diff_tools_approver.approved.txt
+--- received
++++ approved
+@@ -1 +0,0 @@
+-Hello World!
