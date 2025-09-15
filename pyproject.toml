@@ -6,7 +6,7 @@ readme = "README.md"
 license = "LGPL-3.0-only"
 authors = [{email="ohsome@heigit.org"}]
 classifiers = ["Framework :: Pytest"]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "pytest>=8.3.5",
 ]
