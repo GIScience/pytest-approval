@@ -6,11 +6,11 @@ PyCharm and Visual Studio Code to compare approved and received output.
 ## About
 
 Approval tests capture the output (a snapshot) of a piece of code and compare it
-with a previously approved version of the output.
+with a previously approved version of the output (the expected result).
 
-It's most useful in environments where frequent changes are expected or where
+It's most useful in environments where frequent changes are common or where
 the output is of a complex nature but can be easily verified by humans, aided for
-example by a diff-tool or a visual representation of the output.
+example by a diff-tool or a visual representation of the output (think of an image).
 
 Once the output has been *approved* then as long as the output stays the same
 the test will pass. A test fails if the *received* output is not identical to
@@ -19,7 +19,7 @@ approved output is reported to the tester.
 
 For outputs that can be represented by text, a report can be as simple as
 printing the difference to the terminal. Using diff programs with a graphical
-user interface such as PyCharm or Visual Studio Coder as *reporter* not
+user interface such as Meld, PyCharm or Visual Studio Code as *reporter* not
 only helps to visualize the difference, but they can also be used as *approver*
 by applying the changes of the received output to the approved output.
 
@@ -46,7 +46,10 @@ One of following programs installed:
 ## Installation
 
 ```sh
-uv add git+https://github.com/GIScience/asyncpg-recorder.git
+uv add git+https://github.com/GIScience/pytest-approval.git
+
+# Including image support
+uv add --optional image git+https://github.com/GIScience/pytest-approval.git
 ```
 
 
@@ -96,7 +99,7 @@ This is useful for elimination of approval files which are not in use anymore.
 ## Configuration
 
 Approved and received files are stored next to the test file per default.
-If you want to save those files in a specific directory instead, please set the `approvals-dir` key in your `pyproject.toml`:
+If you want to save those files in a specific directory instead, please set the `approved-dir` key in your `pyproject.toml`:
 
 ```toml
 [tool.pytest-approval]
