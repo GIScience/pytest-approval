@@ -5,7 +5,18 @@ import shutil
 import subprocess
 import zlib
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal
+
+if TYPE_CHECKING:
+    # Always true for type checker. Always false during runtime.
+    from PIL import Image
+
+try:
+    from PIL import Image
+
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
 
 from pytest_approval.compare import compare_files, compare_image_contents_only
 from pytest_approval.definitions import (
@@ -14,7 +25,7 @@ from pytest_approval.definitions import (
     REPORTERS_BINARY,
     REPORTERS_TEXT,
 )
-from pytest_approval.utils import sort_dict
+from pytest_approval.utils import pillow_image_to_bytes, sort_dict
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +51,7 @@ def verify(
 
 
 def verify_binary(
-    data: Any,
+    data: bytes,
     *,
     extension: Literal[".jpg", ".jpeg", ".png"],
 ) -> bool:
@@ -48,7 +59,7 @@ def verify_binary(
 
 
 def verify_image(
-    data: Any,
+    data: bytes,
     *,
     extension: Literal[".jpg", ".jpeg", ".png"],
     content_only: bool = False,
@@ -63,6 +74,23 @@ def verify_image(
     return _verify(data, extension)
 
 
+if PIL_AVAILABLE:
+
+    def verify_image_pillow(
+        data: Image.Image,
+        *,
+        extension: Literal[".jpg", ".jpeg", ".png"],
+        content_only: bool = False,
+    ) -> bool:
+        """Verify pillow image.
+
+        Args:
+            content_only: only compare content without metadata.
+        """
+        raw = pillow_image_to_bytes(data, extension)
+        return verify_image(raw, extension=extension, content_only=content_only)
+
+
 def verify_json(
     data: str | dict,
     *,
@@ -74,7 +102,7 @@ def verify_json(
     if sort:
         data = sort_dict(data)
     data = json.dumps(data, indent=True)
-    return _verify(data, extension)
+    return _verify(data, extension=extension)
 
 
 def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
