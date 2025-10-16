@@ -99,11 +99,11 @@ This is useful for elimination of approval files which are not in use anymore.
 ## Configuration
 
 Approved and received files are stored next to the test file per default.
-If you want to save those files in a specific directory instead, please set the `approved-dir` key in your `pyproject.toml`:
+If you want to save those files in a specific directory instead, please set the `approvals-dir` key in your `pyproject.toml`:
 
 ```toml
 [tool.pytest-approval]
-"approved-dir"="tests/approvals"  
+"approvals-dir"="tests/approvals"  
 ```
 
 This path is relative to your pytest root (usually your `pyproject.toml`).
