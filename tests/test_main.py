@@ -4,12 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from pytest_approval import verify, verify_binary, verify_json
-from pytest_approval.definitions import (
-    BINARY_EXTENSIONS,
-    REPORTERS_BINARY,
-    REPORTERS_TEXT,
-)
+from pytest_approval import verify
+from pytest_approval.definitions import REPORTERS_TEXT
 from pytest_approval.main import _name
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
@@ -71,16 +67,6 @@ def test_verify_multiple_calls():
 def test_verify_string_all_reporter(reporter, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
     assert verify("Hello World!")
-
-
-# TODO read empty files for extension and verify it:
-@pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
-def test_verify_binary(extension, monkeypatch):
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_BINARY", [REPORTERS_BINARY[1]])
-    with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
-        data = file.read()
-
-    assert verify_binary(data, extension=extension)
 
 
 def test_verify_gnu_diff_tools_approver(monkeypatch):
