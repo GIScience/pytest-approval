@@ -71,7 +71,8 @@ def test_verify_dict()
 ```
 
 
-Verify binary files such as an image:
+To verify binary files such as an image PyCharm or Visual Studio Code needs to
+be installed. Examples:
 
 ```python
 from PIL import Image
