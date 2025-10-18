@@ -74,13 +74,24 @@ def test_verify_dict()
 Verify binary files such as an image:
 
 ```python
-from pytest_approval import  verify_binary
+from PIL import Image
+from pytest_approval import verify_binary, verify_image, verify_image_pillow
 
 
 def test_verify_binary(image):
     with open("my_image.jpg", "rb") as file:
         buffer = file.read()
     assert verify_binary(buffer, extension=".jpg")
+
+
+def test_verify_image(image):
+    image = Image.open("my_image.jpg")
+    assert verify_image(image, extension=".jpg", content_only=True)
+
+
+def test_verify_image_pillow(image):
+    image = Image.open("my_image.jpg")
+    assert verify_image_pillow(image, extension=".jpg")
 ```
 
 ### Auto approval
@@ -106,7 +117,7 @@ If you want to save those files in a specific directory instead, please set the 
 "approvals-dir"="tests/approvals"  
 ```
 
-This path is relative to your pytest root (usually your `pyproject.toml`).
+The path is relative to pytest root (usually `pyproject.toml`).
 
 <!-- ## Configuration -->
 <!---->
