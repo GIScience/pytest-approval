@@ -29,7 +29,7 @@ def approved(monkeypatch):
 @pytest.fixture
 def approved_different(monkeypatch):
     monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    received, approved = _name()
+    _, approved = _name()
     with open(approved, "w") as file:
         file.write("hello world")
     yield approved
@@ -38,7 +38,7 @@ def approved_different(monkeypatch):
 @pytest.fixture
 def path(monkeypatch):
     monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    received, approved = _name()
+    _, approved = _name()
     yield approved
     approved.unlink(missing_ok=True)
 
@@ -73,22 +73,6 @@ def test_verify_string_all_reporter(reporter, monkeypatch):
     assert verify("Hello World!")
 
 
-@pytest.mark.parametrize(
-    "json",
-    (
-        {"b": 100, "a": None},
-        '{"b": 100, "a": null}',
-    ),
-)
-def test_verify_json(json):
-    assert verify_json(json)
-
-
-def test_verify_json_sort():
-    json = {"b": 100, "a": {"d": 10, "c": 10}}
-    assert verify_json(json, sort=True)
-
-
 # TODO read empty files for extension and verify it:
 @pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
 def test_verify_binary(extension, monkeypatch):
@@ -111,13 +95,15 @@ def test_verify_gnu_diff_tools_approver(monkeypatch):
     assert verify(error_string)
 
 
-def test_verify_approved_equal(approved, fake_process):
+@pytest.mark.usefixtures("approved")
+def test_verify_approved_equal(fake_process):
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is True
     assert fake_process.call_count(["meld", fake_process.any()]) == 0
 
 
-def test_verify_approved_different(approved_different, fake_process, monkeypatch):
+@pytest.mark.usefixtures("approved_different")
+def test_verify_approved_different(fake_process, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is False

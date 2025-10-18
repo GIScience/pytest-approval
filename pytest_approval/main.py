@@ -43,7 +43,7 @@ class NoApproverFoundError(FileNotFoundError):
 
 
 def verify(
-    data: Any,
+    data: str,
     *,
     extension: str = ".txt",
 ) -> bool:
@@ -92,15 +92,21 @@ if PIL_AVAILABLE:
 
 
 def verify_json(
-    data: str | dict,
+    data: str | dict | list | Any,
     *,
     extension: Literal[".json"] = ".json",
     sort: bool = False,
 ) -> bool:
+    """Verify as JSON.
+
+    Accepts data as JSON string or JSON serializable object.
+    """
     if isinstance(data, str):
         data = json.loads(data)
-    if sort:
+    if sort and isinstance(data, dict):
         data = sort_dict(data)
+    elif sort and isinstance(data, list):
+        data.sort()
     data = json.dumps(data, indent=True)
     return _verify(data, extension=extension)
 
