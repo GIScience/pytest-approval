@@ -146,6 +146,7 @@ This path is relative to your pytest root (usually your `pyproject.toml`).
 ```sh
 uv sync --all-extras
 uv run pytest
+pre-commit install
 ```
 
 ### Release
