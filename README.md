@@ -162,11 +162,11 @@ To make a new release run `./scripts/release.sh YYYY.MM.DD`
 
 ## Alternatives
 
-*[Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.*
+- [Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.
+- [Approvaltests](https://github.com/approvals/ApprovalTests.Python) is an open source assertion/verification library to aid testing.
 
 <!-- Approval happens though passing a command line argument `--snapshot-update` to pytest. Syrupy has not built-in diff reporter for images (See issues [#886](https://github.com/syrupy-project/syrupy/issues/886) and [#566](https://github.com/syrupy-project/syrupy/issues/566). -->
 
-*[Approvaltests](https://github.com/approvals/ApprovalTests.Python) is an open source assertion/verification library to aid testing.*
 
 <!-- better default namer. if run with pytest namer takes nodeid into account and works with parametrized tests out of the box-->
 <!-- Default behavior is to go through a list of reporters until one is found -->
