@@ -163,12 +163,10 @@ def _write_text(data, received, approved):
 
 
 def _name(extension=".txt") -> tuple[Path, Path]:
-    # TODO: support base dir (then rewrite tests to use tmp_dir)
-    # TODO: support postfix (write test with multiple calls to verify)
     # TODO: Try out with xdist
     node_id = os.environ["PYTEST_CURRENT_TEST"]
     if "[" in node_id and "]" in node_id:
-        # TODO: Only use hash if params are loo long or special chars are presenet
+        # TODO: Only use hash if params are loo long or special chars are present
         start = node_id.index("[") + 1
         end = node_id.index("]")
         params = node_id[start:end]
@@ -246,5 +244,3 @@ def _report(received: Path, approved: Path):
             raise AssertionError(msg + completed_process.stdout.decode("utf-8"))
         else:
             raise NoApproverFoundError()
-            continue
-    raise
