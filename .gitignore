@@ -12,4 +12,7 @@ wheels/
 .pytest_cache
 .ruff_cache
 
+.coverage
+coverage.xml
+
 *.received.txt
