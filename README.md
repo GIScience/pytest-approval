@@ -30,6 +30,12 @@ PyCharm and Visual Studio Code can work with images as well.
 > A picture’s worth a 1000 tests ([approvaltests.com](https://approvaltests.com/)).
 
 
+<!-- ## Features -->
+<!---->
+<!-- - Auto approval mode: Helps cleaning up approval files -->
+<!-- - Generated names of approval files are based on pytest nodeid -->
+
+
 ## Requirements
 
 OS
@@ -93,6 +99,18 @@ def test_verify_image(image):
 def test_verify_image_pillow(image):
     image = Image.open("my_image.jpg")
     assert verify_image_pillow(image, extension=".jpg")
+```
+
+
+During development its sometimes helpful to show received and approved output,
+to report, even though both are equal:
+
+```python
+from pytest_approval import verify, verify_json
+
+
+def test_verify_string()
+    assert verify("Hello World!", report_always=True)
 ```
 
 ### Auto approval
@@ -171,6 +189,7 @@ In case of releasing twice on one day add a micro number starting with 1:
 `YYYY.MM.DD.micro` (E.g. `2025.9.2.1`).
 
 To make a new release run `./scripts/release.sh YYYY.MM.DD`
+
 
 ## Alternatives
 

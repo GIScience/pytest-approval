@@ -42,26 +42,29 @@ class NoApproverFoundError(FileNotFoundError):
         super().__init__("No working approver could be found.")
 
 
-def verify(
-    data: str,
-    *,
-    extension: str = ".txt",
-) -> bool:
-    return _verify(data, extension)
+def verify(data: str, *, extension: str = ".txt", report_always: bool = False) -> bool:
+    """Verify.
+
+    Args:
+        report_always: Always report even if received and approved are equal.
+    """
+    return _verify(data, extension, report_always)
 
 
 def verify_binary(
     data: bytes,
     *,
     extension: Literal[".jpg", ".jpeg", ".png"],
+    report_always: bool = False,
 ) -> bool:
-    return _verify(data, extension)
+    return _verify(data, extension, report_always)
 
 
 def verify_image(
     data: bytes,
     *,
     extension: Literal[".jpg", ".jpeg", ".png"],
+    report_always: bool = False,
     content_only: bool = False,
 ) -> bool:
     """Verify image.
@@ -71,7 +74,7 @@ def verify_image(
     """
     if content_only:
         return _verify(data, extension, compare=compare_image_contents_only)
-    return _verify(data, extension)
+    return _verify(data, extension, report_always)
 
 
 if PIL_AVAILABLE:
@@ -80,6 +83,7 @@ if PIL_AVAILABLE:
         data: Image.Image,
         *,
         extension: Literal[".jpg", ".jpeg", ".png"],
+        report_always: bool = False,
         content_only: bool = False,
     ) -> bool:
         """Verify pillow image.
@@ -88,13 +92,19 @@ if PIL_AVAILABLE:
             content_only: only compare content without metadata.
         """
         raw = pillow_image_to_bytes(data, extension)
-        return verify_image(raw, extension=extension, content_only=content_only)
+        return verify_image(
+            raw,
+            extension=extension,
+            report_always=report_always,
+            content_only=content_only,
+        )
 
 
 def verify_json(
     data: str | dict | list | Any,
     *,
     extension: Literal[".json"] = ".json",
+    report_always: bool = False,
     sort: bool = False,
 ) -> bool:
     """Verify as JSON.
@@ -108,15 +118,20 @@ def verify_json(
     elif sort and isinstance(data, list):
         data.sort()
     data = json.dumps(data, indent=True)
-    return _verify(data, extension=extension)
+    return _verify(data, extension=extension, report_always=report_always)
 
 
-def _verify(data: Any, extension: str, compare: Callable = compare_files) -> bool:
+def _verify(
+    data: Any,
+    extension: str,
+    report_always: bool,
+    compare: Callable = compare_files,
+) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved)
     if AUTO_APPROVE:
         shutil.copyfile(received, approved)
-    if compare(received, approved):
+    if compare(received, approved) and not report_always:
         received.unlink()
         return True
     else:
