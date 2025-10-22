@@ -258,8 +258,8 @@ def _report(received: Path, approved: Path):
             return
         elif completed_process.returncode == 1:
             msg = (
-                "Received is different from approved.\n"
-                + f"To approve run mv --force {received} {approved}\n"
+                "Received is different from approved:\n"
+                + f"\t{received}\n\t{approved}\n"
             )
             raise AssertionError(msg + completed_process.stdout.decode("utf-8"))
         else:

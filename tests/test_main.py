@@ -75,10 +75,10 @@ def test_verify_gnu_diff_tools_approver(monkeypatch):
     with pytest.raises(AssertionError) as error:
         assert verify("Hello World!")
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", REPORTERS_TEXT)
-    pattern = r"/([^\s]+)pytest-approval/"
-    replacement = "path/to/repo/pytest-approval/"
-    error_string = re.sub(pattern, replacement, str(error.value))
-    assert verify(error_string)
+    pattern = r"^\t\/.*\/([^\/]*(received|approved)\.txt)$"
+    replacement = r"\t\1"
+    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
+    assert verify(error_text)
 
 
 @pytest.mark.usefixtures("approved")
