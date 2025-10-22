@@ -73,7 +73,12 @@ def verify_image(
         content_only: only compare content without metadata.
     """
     if content_only:
-        return _verify(data, extension, compare=compare_image_contents_only)
+        return _verify(
+            data,
+            extension,
+            report_always,
+            compare=compare_image_contents_only,
+        )
     return _verify(data, extension, report_always)
 
 
