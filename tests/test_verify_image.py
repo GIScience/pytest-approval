@@ -20,4 +20,4 @@ def test_verify_image_bytes(extension):
 @pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
 def test_verify_image_pillow(extension):
     image = Image.open(FIXTURE_DIR / f"binary{extension}")
-    assert verify_image_pillow(image, extension=extension)
+    assert verify_image_pillow(image, extension=extension, content_only=True)
