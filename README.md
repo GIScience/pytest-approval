@@ -180,8 +180,8 @@ The path is relative to pytest root (usually `pyproject.toml`).
 
 ```sh
 uv sync --all-extras
+uv run pre-commit install
 uv run pytest
-pre-commit install
 ```
 
 ### Release
