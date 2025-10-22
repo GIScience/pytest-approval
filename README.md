@@ -1,4 +1,9 @@
-# README
+# pytest approval
+
+[![Build Status](https://jenkins.heigit.org/buildStatus/icon?job=pytest-approval/main)](https://jenkins.heigit.org/job/pytest-approval/job/main/)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=pytest-approval&metric=alert_status)](https://sonarcloud.io/dashboard?id=pytest-approval)
+[![LICENSE](https://img.shields.io/github/license/GIScience/pytest-approval)](COPYING)
+[![status: active](https://github.com/GIScience/badges/raw/master/status/active.svg)](https://github.com/GIScience/badges#active)
 
 A simple approval test library utilizing external diff programs such as
 PyCharm and Visual Studio Code to compare approved and received output.
