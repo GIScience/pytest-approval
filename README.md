@@ -2,6 +2,7 @@
 
 [![Build Status](https://jenkins.heigit.org/buildStatus/icon?job=pytest-approval/main)](https://jenkins.heigit.org/job/pytest-approval/job/main/)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=pytest-approval&metric=alert_status)](https://sonarcloud.io/dashboard?id=pytest-approval)
+[![PyPI - Version](https://img.shields.io/pypi/v/pytest-approval)](https://pypi.org/project/pytest-approval/)
 [![LICENSE](https://img.shields.io/github/license/GIScience/pytest-approval)](COPYING)
 [![status: active](https://github.com/GIScience/badges/raw/master/status/active.svg)](https://github.com/GIScience/badges#active)
 
