@@ -84,10 +84,17 @@ pipeline {
         }
 
         stage('Build and Deploy Package') {
+            when {
+                expression {
+                    return VERSION ==~ RELEASE_REGEX && env.TAG_NAME ==~ RELEASE_REGEX
+                }
+            }
             steps {
                 script {
-                    // TODO deploy Python package
-                    echo "to be implemented later"
+                    sh 'uv build'
+                    withCredentials([string(credentialsId: 'PyPI-API-Token', variable: 'UV_PUBLISH_TOKEN')]) {
+                        sh 'uv publish'
+                    }
                 }
             }
         }
