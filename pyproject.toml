@@ -1,15 +1,38 @@
 [project]
 name = "pytest-approval"
 version = "0.1.0"
+authors = [{name="HeiGIT ohsome team", email="ohsome@heigit.org"}]
 description = "A simple approval test library utilizing external diff programs such as PyCharm and Visual Studio Code to compare approved and received output."
 readme = "README.md"
-license = "LGPL-3.0-only"
-authors = [{email="ohsome@heigit.org"}]
-classifiers = ["Framework :: Pytest"]
 requires-python = ">=3.11"
+classifiers = [
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing",
+]
+license = "LGPL-3.0-only"
+license-files = ["COPYING*"]
 dependencies = [
     "pytest>=8.3.5",
 ]
+
+[project.urls]
+Homepage = "https://ohsome.org/"
+# TODO: update once dedicated documentation is available
+Documentation = "https://github.com/GIScience/pytest-approval/blob/main/README.md"
+Repository = "https://github.com/GIScience/pytest-approval"
+Issues = "https://github.com/GISciene/pytest-approval/issues"
+
+[build-system]
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
@@ -27,10 +50,6 @@ image = [
 
 [project.entry-points.pytest11]
 pytest_approval = "pytest_approval.plugin"
-
-[build-system]
-requires = ["uv_build>=0.7.5"]
-build-backend = "uv_build"
 
 [tool.uv.build-backend]
 module-root = ""
