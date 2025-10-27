@@ -58,10 +58,10 @@ One of following programs installed:
 ## Installation
 
 ```sh
-uv add git+https://github.com/GIScience/pytest-approval.git
+uv add pytest-approval
 
 # Including image support
-uv add --optional image git+https://github.com/GIScience/pytest-approval.git
+uv add --optional image pytest-approval
 ```
 
 
