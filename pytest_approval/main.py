@@ -148,15 +148,17 @@ def _verify(
             return False
 
 
-def _write(data, received, approved):
+def _write(data, received: Path, approved: Path):
     """Write received to disk and create empty approved file if not exists."""
+    received.parent.mkdir(exist_ok=True, parents=True)
+    approved.parent.mkdir(exist_ok=True, parents=True)
     if received.suffix in BINARY_EXTENSIONS:
         _write_binary(data, received, approved)
     else:
         _write_text(data, received, approved)
 
 
-def _write_binary(data, received, approved):
+def _write_binary(data, received: Path, approved: Path):
     with open(received, "wb") as file:
         file.write(data)
     if not approved.exists():
@@ -174,7 +176,7 @@ def _write_binary(data, received, approved):
             ) from e
 
 
-def _write_text(data, received, approved):
+def _write_text(data, received: Path, approved: Path):
     if len(data) == 0 or data[-1] != "\n":
         data = data + "\n"
     received.write_text(data)
