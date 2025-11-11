@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import zlib
+from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
@@ -25,7 +26,7 @@ from pytest_approval.definitions import (
     REPORTERS_BINARY,
     REPORTERS_TEXT,
 )
-from pytest_approval.utils import pillow_image_to_bytes, sort_dict
+from pytest_approval.utils import sort_dict
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,14 @@ def verify_image(
 
 if PIL_AVAILABLE:
 
+    def _pillow_image_to_bytes(image: Image.Image, extension: str) -> bytes:
+        buffer = BytesIO()
+        format = extension.replace(".", "")
+        if format == "jpg":
+            format = "jpeg"
+        image.save(buffer, format=format)
+        return buffer.getvalue()
+
     def verify_image_pillow(
         data: Image.Image,
         *,
@@ -96,7 +105,7 @@ if PIL_AVAILABLE:
         Args:
             content_only: only compare content without metadata.
         """
-        raw = pillow_image_to_bytes(data, extension)
+        raw = _pillow_image_to_bytes(data, extension)
         return verify_image(
             raw,
             extension=extension,
