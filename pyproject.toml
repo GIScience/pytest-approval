@@ -1,6 +1,6 @@
 [project]
 name = "pytest-approval"
-version = "0.2.0"
+version = "0.3.0"
 authors = [{name="HeiGIT ohsome team", email="ohsome@heigit.org"}]
 description = "A simple approval test library utilizing external diff programs such as PyCharm and Visual Studio Code to compare approved and received output."
 readme = "README.md"
