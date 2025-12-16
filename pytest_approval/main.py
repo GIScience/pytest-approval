@@ -87,10 +87,10 @@ if PIL_AVAILABLE:
 
     def _pillow_image_to_bytes(image: Image.Image, extension: str) -> bytes:
         buffer = BytesIO()
-        format = extension.replace(".", "")
-        if format == "jpg":
-            format = "jpeg"
-        image.save(buffer, format=format)
+        format_ = extension.replace(".", "")
+        if format_ == "jpg":
+            format_ = "jpeg"
+        image.save(buffer, format=format_)
         return buffer.getvalue()
 
     def verify_image_pillow(
@@ -201,16 +201,16 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         start = node_id.index("[") + 1
         end = node_id.index("]")
         params = node_id[start:end]
-        hash = str(zlib.crc32(params.encode("utf-8")))
+        hash_ = str(zlib.crc32(params.encode("utf-8")))
     else:
         params = ""
-        hash = ""
+        hash_ = ""
     file_path = (
         node_id.replace(" (call)", "")
         .replace(" (setup)", "")
         .replace(" (teardown)", "")
         .replace("::", "--")
-        .replace(params, hash)
+        .replace(params, hash_)
     )
     count = _count(file_path)
     if APPROVALS_DIR:
