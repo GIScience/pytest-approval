@@ -74,6 +74,7 @@ select = [
     "S",    # bandit
     "B",    # bugbear
     "SIM",  # simplify
+    "LOG",  # flake8-logging
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
