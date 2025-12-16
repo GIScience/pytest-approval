@@ -59,6 +59,7 @@ testpaths = ["tests"]
 
 [tool.ruff.lint]
 select = [
+    "A",    # flake8-builtins
     "E",    # pycodestyle Error
     "F",    # Pyflakes
     "I",    # isort
