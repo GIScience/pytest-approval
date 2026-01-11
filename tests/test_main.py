@@ -44,11 +44,17 @@ def test_verify_string(string):
     assert verify(string)
 
 
-def test_verify_string_scrub():
+def test_verify_string_scrub_datetime():
     example = "2021-01-01T00:00:00+00:00"
     string = "Some text with datetime string 2021-01-01T00:00:00+00:00..."
     scrub_datetime = scrub.get_datetime_scrubber(example)
     assert verify(string, scrub=scrub_datetime)
+
+
+def test_verify_string_scrub_uuid():
+    string = "Some text with uuid string 27de4925-c261-4e8f-973d-74213004b27d..."
+    scrub_uuid = scrub.get_uuid_scrubber()
+    assert verify(string, scrub=scrub_uuid)
 
 
 def test_verify_multiple_calls():

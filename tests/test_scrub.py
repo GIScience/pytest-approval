@@ -1,4 +1,5 @@
 import pytest
+from hypothesis import given, strategies
 
 from pytest_approval import scrub
 
@@ -30,6 +31,8 @@ datetime_text_exmaples = (
     "2020-02-02",
 )
 
+uuid_examples = ("27de4925-c261-4e8f-973d-74213004b27d",)
+
 
 @pytest.mark.parametrize("example", datetime_text_exmaples)
 def test_scrub_datetime(example: str):
@@ -42,3 +45,9 @@ def test_scrub_datetime_not_found(example):
     with pytest.raises(scrub.NoDatetimeScrubberFoundError) as error:
         scrub.get_datetime_scrubber(example)
     assert example in str(error.value)
+
+
+@given(strategies.uuids())
+def test_scrub_uuid(uuid):
+    scrub_uuid = scrub.get_uuid_scrubber()
+    assert scrub_uuid(f"prefix {uuid} postfix") == "prefix {{UUID}} postfix"

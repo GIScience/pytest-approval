@@ -57,3 +57,8 @@ def get_datetime_scrubber(example: str, sub: str = "{{DATETIME}}") -> Callable:
         if re.fullmatch(regex, example) is not None:
             return partial(scrub, regex=regex, sub=sub)
     raise NoDatetimeScrubberFoundError("No datetime scrubber found for '%s'." % example)
+
+
+def get_uuid_scrubber(sub: str = "{{UUID}}") -> Callable:
+    regex = r"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}"  # noqa
+    return partial(scrub, regex=regex, sub=sub)

@@ -1,4 +1,4 @@
-from pytest_approval.scrub import get_datetime_scrubber
+from pytest_approval.scrub import get_datetime_scrubber, get_uuid_scrubber
 
 try:
     from pytest_approval.main import (
@@ -11,6 +11,7 @@ try:
 
     __all__ = (
         "get_datetime_scrubber",
+        "get_uuid_scrubber",
         "verify",
         "verify_binary",
         "verify_image",
@@ -27,6 +28,7 @@ except ImportError:
 
     __all__ = (
         "get_datetime_scrubber",
+        "get_uuid_scrubber",
         "verify",
         "verify_binary",
         "verify_image",
