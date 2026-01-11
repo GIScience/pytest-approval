@@ -48,7 +48,7 @@ def verify(
     *,
     extension: str = ".txt",
     report_always: bool = False,
-    scrub: Callable | None = None,
+    scrub: Callable | tuple[Callable, ...] | None = None,
 ) -> bool:
     """Verify.
 
@@ -126,7 +126,7 @@ def verify_json(
     extension: Literal[".json"] = ".json",
     report_always: bool = False,
     sort: bool = False,
-    scrub: Callable | None = None,
+    scrub: Callable | tuple[Callable, ...] | None = None,
 ) -> bool:
     """Verify as JSON.
 
@@ -148,7 +148,7 @@ def _verify(
     *,
     report_always: bool = False,
     compare: Callable = compare_files,
-    scrub: Callable | None = None,
+    scrub: Callable | tuple[Callable, ...] | None = None,
 ) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved, scrub)
@@ -166,7 +166,12 @@ def _verify(
             return False
 
 
-def _write(data, received: Path, approved: Path, scrub: Callable | None = None):
+def _write(
+    data,
+    received: Path,
+    approved: Path,
+    scrub: Callable | tuple[Callable, ...] | None = None,
+):
     """Write received to disk and create empty approved file if not exists."""
     received.parent.mkdir(exist_ok=True, parents=True)
     approved.parent.mkdir(exist_ok=True, parents=True)
@@ -198,12 +203,16 @@ def _write_text(
     data,
     received: Path,
     approved: Path,
-    scrub: Callable | None = None,
+    scrub: Callable | tuple[Callable, ...] | None = None,
 ):
     if len(data) == 0 or data[-1] != "\n":
         data = data + "\n"
     if scrub is not None:
-        data = scrub(data)
+        if isinstance(scrub, tuple):
+            for s in scrub:
+                data = s(data)
+        else:
+            data = scrub(data)
     received.write_text(data)
     if not approved.exists():
         approved.touch()

@@ -31,8 +31,6 @@ datetime_text_exmaples = (
     "2020-02-02",
 )
 
-uuid_examples = ("27de4925-c261-4e8f-973d-74213004b27d",)
-
 
 @pytest.mark.parametrize("example", datetime_text_exmaples)
 def test_scrub_datetime(example: str):

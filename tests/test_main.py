@@ -57,6 +57,15 @@ def test_verify_string_scrub_uuid():
     assert verify(string, scrub=scrub_uuid)
 
 
+def test_verify_string_scrub_multiple():
+    scrub_uuid = scrub.get_uuid_scrubber()
+    scrub_datetime = scrub.get_datetime_scrubber("2020-02-02")
+    assert verify(
+        "27de4925-c261-4e8f-973d-74213004b27d and 2020-02-02",
+        scrub=(scrub_uuid, scrub_datetime),
+    )
+
+
 def test_verify_multiple_calls():
     """Test multiple calls to verify. File names should be numbered."""
     assert verify("foo")
