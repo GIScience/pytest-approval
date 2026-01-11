@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.6.0
+
+- feat: add uuid scrubber (#d86f1f1ca37e15e99df62006e464ba0e3feab3c5)
+
 ## 0.5.0
 
 - feat: add more formats to date-time scrubber (#b03be9e)
