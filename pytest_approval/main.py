@@ -43,13 +43,19 @@ class NoApproverFoundError(FileNotFoundError):
         super().__init__("No working approver could be found.")
 
 
-def verify(data: str, *, extension: str = ".txt", report_always: bool = False) -> bool:
+def verify(
+    data: str,
+    *,
+    extension: str = ".txt",
+    report_always: bool = False,
+    scrub: Callable | None = None,
+) -> bool:
     """Verify.
 
     Args:
         report_always: Always report even if received and approved are equal.
     """
-    return _verify(data, extension, report_always)
+    return _verify(data, extension, report_always=report_always, scrub=scrub)
 
 
 def verify_binary(
@@ -58,7 +64,7 @@ def verify_binary(
     extension: Literal[".jpg", ".jpeg", ".png"],
     report_always: bool = False,
 ) -> bool:
-    return _verify(data, extension, report_always)
+    return _verify(data, extension, report_always=report_always)
 
 
 def verify_image(
@@ -77,10 +83,10 @@ def verify_image(
         return _verify(
             data,
             extension,
-            report_always,
+            report_always=report_always,
             compare=compare_image_contents_only,
         )
-    return _verify(data, extension, report_always)
+    return _verify(data, extension, report_always=report_always)
 
 
 if PIL_AVAILABLE:
@@ -120,6 +126,7 @@ def verify_json(
     extension: Literal[".json"] = ".json",
     report_always: bool = False,
     sort: bool = False,
+    scrub: Callable | None = None,
 ) -> bool:
     """Verify as JSON.
 
@@ -132,17 +139,19 @@ def verify_json(
     elif sort and isinstance(data, list):
         data.sort()
     data = json.dumps(data, indent=True)
-    return _verify(data, extension=extension, report_always=report_always)
+    return _verify(data, extension=extension, report_always=report_always, scrub=scrub)
 
 
 def _verify(
     data: Any,
     extension: str,
-    report_always: bool,
+    *,
+    report_always: bool = False,
     compare: Callable = compare_files,
+    scrub: Callable | None = None,
 ) -> bool:
     received, approved = _name(extension)
-    _write(data, received, approved)
+    _write(data, received, approved, scrub)
     if AUTO_APPROVE:
         shutil.copyfile(received, approved)
     if compare(received, approved) and not report_always:
@@ -157,14 +166,14 @@ def _verify(
             return False
 
 
-def _write(data, received: Path, approved: Path):
+def _write(data, received: Path, approved: Path, scrub: Callable | None = None):
     """Write received to disk and create empty approved file if not exists."""
     received.parent.mkdir(exist_ok=True, parents=True)
     approved.parent.mkdir(exist_ok=True, parents=True)
     if received.suffix in BINARY_EXTENSIONS:
         _write_binary(data, received, approved)
     else:
-        _write_text(data, received, approved)
+        _write_text(data, received, approved, scrub)
 
 
 def _write_binary(data, received: Path, approved: Path):
@@ -185,9 +194,16 @@ def _write_binary(data, received: Path, approved: Path):
             ) from e
 
 
-def _write_text(data, received: Path, approved: Path):
+def _write_text(
+    data,
+    received: Path,
+    approved: Path,
+    scrub: Callable | None = None,
+):
     if len(data) == 0 or data[-1] != "\n":
         data = data + "\n"
+    if scrub is not None:
+        data = scrub(data)
     received.write_text(data)
     if not approved.exists():
         approved.touch()

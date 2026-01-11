@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from pytest_approval import verify
+from pytest_approval import scrub, verify
 from pytest_approval.definitions import REPORTERS_TEXT
 from pytest_approval.main import _name
 
@@ -42,6 +42,13 @@ def path(monkeypatch):
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
 def test_verify_string(string):
     assert verify(string)
+
+
+def test_verify_string_scrub():
+    example = "2021-01-01T00:00:00+00:00"
+    string = "Some text with datetime string 2021-01-01T00:00:00+00:00..."
+    scrub_datetime = scrub.get_datetime_scrubber(example)
+    assert verify(string, scrub=scrub_datetime)
 
 
 def test_verify_multiple_calls():

@@ -1,6 +1,6 @@
 import pytest
 
-from pytest_approval import verify_json
+from pytest_approval import scrub, verify_json
 
 
 @pytest.mark.parametrize(
@@ -25,3 +25,10 @@ def test_verify_json(json):
 )
 def test_verify_json_sort(json):
     assert verify_json(json, sort=True)
+
+
+def test_verify_json_scrub():
+    d = "2021-01-01T00:00:00+00:00"
+    j = {"date": d}
+    scrub_datetime = scrub.get_datetime_scrubber(d)
+    assert verify_json(j, sort=True, scrub=scrub_datetime)
