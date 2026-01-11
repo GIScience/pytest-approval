@@ -48,7 +48,7 @@ def verify(
     *,
     extension: str = ".txt",
     report_always: bool = False,
-    scrub: Callable | tuple[Callable, ...] | None = None,
+    scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
     """Verify.
 
@@ -126,7 +126,7 @@ def verify_json(
     extension: Literal[".json"] = ".json",
     report_always: bool = False,
     sort: bool = False,
-    scrub: Callable | tuple[Callable, ...] | None = None,
+    scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
     """Verify as JSON.
 
@@ -148,7 +148,7 @@ def _verify(
     *,
     report_always: bool = False,
     compare: Callable = compare_files,
-    scrub: Callable | tuple[Callable, ...] | None = None,
+    scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved, scrub)
@@ -170,7 +170,7 @@ def _write(
     data,
     received: Path,
     approved: Path,
-    scrub: Callable | tuple[Callable, ...] | None = None,
+    scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ):
     """Write received to disk and create empty approved file if not exists."""
     received.parent.mkdir(exist_ok=True, parents=True)
@@ -203,7 +203,7 @@ def _write_text(
     data,
     received: Path,
     approved: Path,
-    scrub: Callable | tuple[Callable, ...] | None = None,
+    scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ):
     if len(data) == 0 or data[-1] != "\n":
         data = data + "\n"
