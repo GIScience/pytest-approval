@@ -1,3 +1,5 @@
+from pytest_approval.scrub import get_datetime_scrubber
+
 try:
     from pytest_approval.main import (
         verify,
@@ -8,6 +10,7 @@ try:
     )
 
     __all__ = (
+        "get_datetime_scrubber",
         "verify",
         "verify_binary",
         "verify_image",
@@ -23,6 +26,7 @@ except ImportError:
     )
 
     __all__ = (
+        "get_datetime_scrubber",
         "verify",
         "verify_binary",
         "verify_image",
