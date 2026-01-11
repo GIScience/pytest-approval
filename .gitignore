@@ -19,3 +19,5 @@ wheels/
 coverage.xml
 
 *.received.txt
+
+.hypothesis/
