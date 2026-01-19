@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.0
+
+- feat: use gnu diff tool as reporter if CI is detected via env (#fa622be)
+
 ## 0.8.0
 
 -feat(datetime-scrubber): support milliseconds format between 1 and 6 places (#5d343bbcc1111cf46b0f06b5949eda036531cea9)
