@@ -154,3 +154,16 @@ def test_auto_approval(monkeypatch, path):
     assert not path.exists()
     assert verify("new content")
     assert path.exists()
+
+
+def test_verify_ci(monkeypatch):
+    """In CI gnu diff reporter should be used."""
+    with monkeypatch.context() as m:
+        m.setenv("CI", "Jenkins")
+        with pytest.raises(AssertionError) as error:
+            assert verify("Hello World!")
+    # replace host file path
+    pattern = r"^\t\/.*\/([^\/]*(received|approved)\.txt)$"
+    replacement = r"\t\1"
+    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
+    assert verify(error_text)

@@ -272,7 +272,9 @@ def _count(file_path: str) -> str:
 
 
 def _report(received: Path, approved: Path):
-    if received.suffix in BINARY_EXTENSIONS:
+    if os.environ.get("CI", None) is not None:
+        reporters = [REPORTERS_TEXT[-1]]
+    elif received.suffix in BINARY_EXTENSIONS:
         reporters = REPORTERS_BINARY
     else:
         reporters = REPORTERS_TEXT

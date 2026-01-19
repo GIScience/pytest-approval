@@ -1,0 +1,7 @@
+Received is different from approved:
+	test_main.py--test_verify_ci.received.txt
+	test_main.py--test_verify_ci.approved.txt
+--- received
++++ approved
+@@ -1 +0,0 @@
+-Hello World!

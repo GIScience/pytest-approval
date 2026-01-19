@@ -1,8 +1,9 @@
+import re
 from pathlib import Path
 
 import pytest
 
-from pytest_approval import verify_binary
+from pytest_approval import verify, verify_binary
 from pytest_approval.definitions import (
     BINARY_EXTENSIONS,
     REPORTERS_BINARY,
@@ -19,3 +20,19 @@ def test_verify_binary(extension, monkeypatch):
         data = file.read()
 
     assert verify_binary(data, extension=extension)
+
+
+@pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
+def test_verify_binary_ci(extension, monkeypatch):
+    """In CI gnu diff reporter should be used."""
+    with monkeypatch.context() as m:
+        m.setenv("CI", "Jenkins")
+        with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
+            data = file.read()
+        with pytest.raises(AssertionError) as error:
+            assert verify_binary(data, extension=extension)
+    # replace host file path
+    pattern = r"^\t\/.*\/([^\/]*(received|approved)\{0})$".format(extension)
+    replacement = r"\t\1"
+    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
+    assert verify(error_text)
