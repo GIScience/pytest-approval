@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from pathlib import Path
 
@@ -156,6 +157,10 @@ def test_auto_approval(monkeypatch, path):
     assert path.exists()
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI") is not None,
+    reason="Skipping because test mocks CI environment",
+)
 def test_verify_ci(monkeypatch):
     """In CI gnu diff reporter should be used."""
     with monkeypatch.context() as m:

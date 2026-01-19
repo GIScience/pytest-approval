@@ -1,3 +1,4 @@
+import os
 import re
 from pathlib import Path
 
@@ -22,6 +23,10 @@ def test_verify_binary(extension, monkeypatch):
     assert verify_binary(data, extension=extension)
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI") is not None,
+    reason="Skipping because test mocks CI environment",
+)
 @pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
 def test_verify_binary_ci(extension, monkeypatch):
     """In CI gnu diff reporter should be used."""
