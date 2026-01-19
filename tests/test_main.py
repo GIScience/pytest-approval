@@ -105,15 +105,17 @@ def test_verify_gnu_diff_tools_approver(monkeypatch):
 
 
 @pytest.mark.usefixtures("approved")
-def test_verify_approved_equal(fake_process):
+def test_verify_approved_equal(fake_process, monkeypatch):
+    monkeypatch.delenv("CI", raising=False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is True
     assert fake_process.call_count(["meld", fake_process.any()]) == 0
 
 
 @pytest.mark.usefixtures("approved")
-def test_verify_approved_equal_report_always(fake_process):
+def test_verify_approved_equal_report_always(fake_process, monkeypatch):
     fake_process.register_subprocess(["meld", fake_process.any()])
+    monkeypatch.delenv("CI", raising=False)
     assert verify("Hello World!", report_always=True) is True
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
 
@@ -121,6 +123,7 @@ def test_verify_approved_equal_report_always(fake_process):
 @pytest.mark.usefixtures("approved_different")
 def test_verify_approved_different(fake_process, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
+    monkeypatch.delenv("CI", raising=False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is False
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
@@ -128,6 +131,7 @@ def test_verify_approved_different(fake_process, monkeypatch):
 
 def test_verify_approved_none(fake_process, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
+    monkeypatch.delenv("CI", raising=False)
     fake_process.register_subprocess(["meld", fake_process.any()])
     assert verify("Hello World!") is False
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
@@ -135,6 +139,7 @@ def test_verify_approved_none(fake_process, monkeypatch):
 
 def test_verify_different_returncode_127(fake_process, caplog, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
+    monkeypatch.delenv("CI", raising=False)
     caplog.set_level(logging.DEBUG)
     fake_process.register_subprocess(
         ["meld", fake_process.any()],
