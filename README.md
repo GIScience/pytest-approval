@@ -195,17 +195,26 @@ To make a new release run `./scripts/release.sh <version>`.
 ## Alternatives
 
 - [Syrupy](https://github.com/syrupy-project/syrupy) is a zero-dependency pytest snapshot plugin. It enables developers to write tests which assert immutability of computed results.
-- [Approvaltests](https://github.com/approvals/ApprovalTests.Python) is an open source assertion/verification library to aid testing.
+- [ApprovalTests.Python](https://github.com/approvals/ApprovalTests.Python) is an open source assertion/verification library to aid testing.
 
-<!-- Approval happens though passing a command line argument `--snapshot-update` to pytest. Syrupy has not built-in diff reporter for images (See issues [#886](https://github.com/syrupy-project/syrupy/issues/886) and [#566](https://github.com/syrupy-project/syrupy/issues/566). -->
+### Comparison with ApprovalTests.Python
 
+ApprovalTests.Python and [ApprovalTests](https://approvaltests.com/) in general
+are the main inspiration for this library. The goal of this library is to
+provide a much smaller, simpler and maintainable code base while at the same
+time providing a simpler interface.
 
-<!-- better default namer. if run with pytest namer takes nodeid into account and works with parametrized tests out of the box-->
-<!-- Default behavior is to go through a list of reporters until one is found -->
-<!-- Better list of reporters -->
-<!-- Blocking behavior -->
-<!-- If diff tool approves test is green imidiatly and received file is removed imidiatly not just after the next run -->
-<!-- No HTTP request during testing to fetch empty binary files  -->
-<!-- Less code -->
-<!-- No dependencies -->
-<!-- Modern python project (uv and ruff) -->
+In contrast to ApprovalTests.Python this library features:
+- Default naming of files are based on PyTest node ID and works with multiple calls to `verify` and with parametrized tests out of the box: [ApprovalTests.Python Documentation](https://github.com/approvals/ApprovalTests.Python/blob/main/docs/how_to/multiple_approvals_per_test.md)
+- Reporters are blocking: [ApprovalTests.Python Issue](https://github.com/approvals/ApprovalTests.Python/issues/95)
+- A list of programs for different operating systems are provided as reporters and the first working reporter is used without any configuration: -> [ApprovalTests.Python Issue](https://github.com/approvals/ApprovalTests.Python/issues/198)
+- On approve the test goes green immediately instead of failing first and succeeding only after another run.
+- No HTTP request to fetch empty binary files during testing: [ApprovalTests.Python Call to EmptyFiles](https://github.com/approvals/ApprovalTests.Python/blob/f1ba04383d7c76c627ef42faef35d1b96f765a2a/approval_utilities/utils.py#L63) [](https://github.com/approvals/EmptyFiles.Python/blob/master/empty_files/empty_files.py#L10) & [EmptyFiles HTTP Request](https://github.com/approvals/EmptyFiles.Python/blob/c1f744ae97e341abb3692908b5df368c6bbc8516/empty_files/empty_files.py#L10)
+- Modern Python project: Usage of `uv`, `ruff` and `pytest` (No shell scripts needed for setup or running tests.)
+- Configuration happens through `pyproject.toml`: [ApprovalTests.Python Documentation](https://github.com/approvals/ApprovalTests.Python/blob/main/docs/configuration.md)
+- Auto approve mode via parameter to PyTest: `pytest --auto-approve`
+
+### Comparison with Syrupy
+
+- Approval in syrupy happens by passing a command line argument `--snapshot-update` to PyTest. 
+- Syrupy has not built-in diff reporter for images (See issues [#886](https://github.com/syrupy-project/syrupy/issues/886) and [#566](https://github.com/syrupy-project/syrupy/issues/566)).
