@@ -224,7 +224,7 @@ def _name(extension=".txt") -> tuple[Path, Path]:
     if "[" in node_id and "]" in node_id:
         # TODO: Only use hash if params are loo long or special chars are present
         start = node_id.index("[") + 1
-        end = node_id.index("]")
+        end = node_id.rindex("]")
         params = node_id[start:end]
         hash_ = str(zlib.crc32(params.encode("utf-8")))
     else:
