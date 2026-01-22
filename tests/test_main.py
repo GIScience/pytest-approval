@@ -32,14 +32,6 @@ def approved_different(monkeypatch):
     yield approved
 
 
-@pytest.fixture
-def path(monkeypatch):
-    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    _, approved = _name()
-    yield approved
-    approved.unlink(missing_ok=True)
-
-
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
 def test_verify_string(string):
     assert verify(string)
