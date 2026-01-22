@@ -48,6 +48,10 @@ image = [
     "numpy>=2.3.1",
     "pillow>=11.3.0"
 ]
+plotly = [
+    "kaleido>=1.2.0",
+    "plotly>=6.0"
+]
 
 [project.entry-points.pytest11]
 pytest_approval = "pytest_approval.plugin"
