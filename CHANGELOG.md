@@ -7,6 +7,7 @@
       contained multiple closing brackets (`]`)
 - refactor: add auto-approve as argument to private _verify function and add
   path with directories to NAMES_WITHOUT_EXTENSION list (#097763b)
+- fix: remove approval file if reporting failed and file is empty (#9727e66)
 
 ## 0.9.0
 
