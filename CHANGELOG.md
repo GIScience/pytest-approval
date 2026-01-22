@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Current Main
+
+- fix: use last `]` of pytest node ID for computing hash naming  (#999a298)
+    - previously naming of parametrized tests produced unexpected name if parameter
+      contained multiple closing brackets (`]`)
+- refactor: add auto-approve as argument to private _verify function and add
+  path with directories to NAMES_WITHOUT_EXTENSION list (#097763b)
+
 ## 0.9.0
 
 - feat: use gnu diff tool as reporter if CI is detected via env (#fa622be)
