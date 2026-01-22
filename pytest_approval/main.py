@@ -35,7 +35,7 @@ ROOT_DIR: str = ""
 APPROVALS_DIR: str = ""
 AUTO_APPROVE: bool = False
 
-NAMES = []
+NAMES_WITHOUT_EXTENSION: list[str] = []  # keep track of duplicated file names
 
 
 class NoApproverFoundError(FileNotFoundError):
@@ -147,17 +147,21 @@ def _verify(
     extension: str,
     *,
     report_always: bool = False,
+    report_suppress: bool = False,
+    auto_approve: bool = False,
     compare: Callable = compare_files,
     scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
     received, approved = _name(extension)
     _write(data, received, approved, scrub)
-    if AUTO_APPROVE:
+    if AUTO_APPROVE or auto_approve:
         shutil.copyfile(received, approved)
     if compare(received, approved) and not report_always:
         received.unlink()
         return True
     else:
+        if report_suppress:
+            return False
         _report(received, approved)
         if compare(received, approved):
             received.unlink()
@@ -250,11 +254,11 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         else:
             i = 0
         file_path = str(Path(*file_path.parts[i:]))
-    received = file_path + count + ".received" + extension
-    approved = file_path + count + ".approved" + extension
+    file_path = str(Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(file_path))
+    count = _count(file_path)
     return (
-        Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(received),
-        Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(approved),
+        Path(file_path + count + ".received" + extension),
+        Path(file_path + count + ".approved" + extension),
     )
 
 
@@ -263,8 +267,8 @@ def _count(file_path: str) -> str:
 
     This means `verify` has been called multiple times in one test function.
     """
-    NAMES.append(file_path)
-    count = NAMES.count(file_path)
+    NAMES_WITHOUT_EXTENSION.append(file_path)
+    count = NAMES_WITHOUT_EXTENSION.count(file_path)
     if count == 1:
         return ""
     else:
