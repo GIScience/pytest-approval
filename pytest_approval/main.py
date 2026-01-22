@@ -160,13 +160,14 @@ def _verify(
         received.unlink()
         return True
     else:
-        if report_suppress:
-            return False
-        _report(received, approved)
+        if not report_suppress:
+            _report(received, approved)
         if compare(received, approved):
             received.unlink()
             return True
         else:
+            if os.stat(approved).st_size == 0:
+                approved.unlink()
             return False
 
 
