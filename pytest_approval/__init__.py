@@ -7,6 +7,7 @@ try:
         verify_image,
         verify_image_pillow,
         verify_json,
+        verify_plotly,
     )
 
     __all__ = (
@@ -17,6 +18,7 @@ try:
         "verify_image",
         "verify_image_pillow",
         "verify_json",
+        "verify_plotly",
     )
 except ImportError:
     from pytest_approval.main import (

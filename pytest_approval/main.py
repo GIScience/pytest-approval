@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any, Callable, Literal
 if TYPE_CHECKING:
     # Always true for type checker. Always false during runtime.
     from PIL import Image
+    from plotly.graph_objects import Figure
 
 try:
     from PIL import Image
@@ -18,6 +19,14 @@ try:
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
+
+
+try:
+    from plotly.graph_objects import Figure
+
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    PLOTLY_AVAILABLE = False
 
 from pytest_approval.compare import compare_files, compare_image_contents_only
 from pytest_approval.definitions import (
@@ -118,6 +127,65 @@ if PIL_AVAILABLE:
             report_always=report_always,
             content_only=content_only,
         )
+
+
+if PLOTLY_AVAILABLE:
+
+    def verify_plotly(
+        data: str | dict | Figure,
+        *,
+        # TODO: Maybe support all plotly to_image formats?
+        extension: Literal[".json"] = ".json",
+        report_always: bool = False,
+    ) -> bool:
+        """Verify Plotly figure. Compare as JSON but report as image (.png).
+
+        Depends on https://plotly.com/python/static-image-export/#install-dependencies
+
+        Args:
+            report_always: Always report even if received and approved are equal.
+                The approved image does not exist. Only the received image is reported.
+                To pass the verification approval needs to be given again.
+        """
+        if isinstance(data, dict):
+            data = Figure(data)
+        elif isinstance(data, str):
+            data = Figure(json.loads(data))
+
+        data_json = data.to_json()
+
+        # First verify JSON without reporting (Compare JSON)
+        success = _verify(data_json, extension=".json", report_suppress=True)
+        if success and not report_always:  # TODO: check report always
+            return True
+
+        # Second verify Image with reporting (Report image) if JSON is different
+        figure = Figure(json.loads(data_json))
+        data_image = figure.to_image(format="png")
+        # HACK: Remove name generated in previous call to verify w/ JSON
+        path = Path(NAMES_WITHOUT_EXTENSION.pop())
+        success = verify_image(
+            data_image,
+            extension=".png",
+            report_always=report_always,
+        )
+
+        # Remove images
+        path.with_suffix(path.suffix + ".received.png").unlink(missing_ok=True)
+        path.with_suffix(path.suffix + ".approved.png").unlink(missing_ok=True)
+
+        # Create approved file with Plotly JSON
+        if success:
+            NAMES_WITHOUT_EXTENSION.pop()  # HACK
+            _verify(
+                data_json,
+                extension=".json",
+                report_suppress=True,
+                auto_approve=True,
+            )
+            return True
+        else:
+            return False
 
 
 def verify_json(
@@ -242,7 +310,6 @@ def _name(extension=".txt") -> tuple[Path, Path]:
         .replace("::", "--")
         .replace(params, hash_)
     )
-    count = _count(file_path)
     if APPROVALS_DIR:
         file_path = Path(file_path)
         # find common parents between approved dir and file path, both
