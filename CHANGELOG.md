@@ -8,6 +8,8 @@
 - refactor: add auto-approve as argument to private _verify function and add
   path with directories to NAMES_WITHOUT_EXTENSION list (#097763b)
 - fix: remove approval file if reporting failed and file is empty (#9727e66)
+- refactor: do not raise assertion error if gnu diff is reporter (#839f370)
+- feat: verify ploty figure (#2076c69)
 
 ## 0.9.0
 
