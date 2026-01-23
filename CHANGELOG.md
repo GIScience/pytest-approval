@@ -17,7 +17,7 @@
 
 ## 0.8.0
 
--feat(datetime-scrubber): support milliseconds format between 1 and 6 places (#5d343bbcc1111cf46b0f06b5949eda036531cea9)
+- feat(datetime-scrubber): support milliseconds format between 1 and 6 places (#5d343bbcc1111cf46b0f06b5949eda036531cea9)
 
 ## 0.7.0
 
