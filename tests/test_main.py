@@ -92,16 +92,16 @@ def test_verify_string_all_reporter(reporter, monkeypatch):
     assert verify("Hello World!")
 
 
-def test_verify_gnu_diff_tools_approver(monkeypatch):
+def test_verify_gnu_diff_tools_approver(monkeypatch, capsys: pytest.CaptureFixture):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [REPORTERS_TEXT[-1]])
-    with pytest.raises(AssertionError) as error:
-        assert verify("Hello World!")
+    assert not verify("Hello World!")
+    stdout, _ = capsys.readouterr()
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", REPORTERS_TEXT)
     pattern = r"^\t\/.*\/([^\/]*(received|approved)\.txt)$"
     replacement = r"\t\1"
-    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
-    assert verify(error_text)
+    log = re.sub(pattern, replacement, stdout, flags=re.MULTILINE)
+    assert verify(log)
 
 
 @pytest.mark.usefixtures("approved")
@@ -166,14 +166,14 @@ def test_auto_approval(monkeypatch, path):
     os.environ.get("CI") is not None,
     reason="Skipping because test mocks CI environment",
 )
-def test_verify_ci(monkeypatch):
+def test_verify_ci(monkeypatch, capsys: pytest.CaptureFixture):
     """In CI gnu diff reporter should be used."""
     with monkeypatch.context() as m:
         m.setenv("CI", "Jenkins")
-        with pytest.raises(AssertionError) as error:
-            assert verify("Hello World!")
+        assert not verify("Hello World!")
+    stdout, _ = capsys.readouterr()
     # replace host file path
     pattern = r"^\t\/.*\/([^\/]*(received|approved)\.txt)$"
     replacement = r"\t\1"
-    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
+    error_text = re.sub(pattern, replacement, stdout, flags=re.MULTILINE)
     assert verify(error_text)

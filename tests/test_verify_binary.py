@@ -28,16 +28,16 @@ def test_verify_binary(extension, monkeypatch):
     reason="Skipping because test mocks CI environment",
 )
 @pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
-def test_verify_binary_ci(extension, monkeypatch):
+def test_verify_binary_ci(extension, monkeypatch, capsys: pytest.CaptureFixture):
     """In CI gnu diff reporter should be used."""
     with monkeypatch.context() as m:
         m.setenv("CI", "Jenkins")
         with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
             data = file.read()
-        with pytest.raises(AssertionError) as error:
-            assert verify_binary(data, extension=extension)
+        assert not verify_binary(data, extension=extension)
+    stdout, _ = capsys.readouterr()
     # replace host file path
     pattern = r"^\t\/.*\/([^\/]*(received|approved)\{0})$".format(extension)
     replacement = r"\t\1"
-    error_text = re.sub(pattern, replacement, str(error.value), flags=re.MULTILINE)
-    assert verify(error_text)
+    text = re.sub(pattern, replacement, stdout, flags=re.MULTILINE)
+    assert verify(text)

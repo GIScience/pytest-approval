@@ -304,6 +304,7 @@ def _report(received: Path, approved: Path):
                 "Received is different from approved:\n"
                 + f"\t{received}\n\t{approved}\n"
             )
-            raise AssertionError(msg + completed_process.stdout.decode("utf-8"))
+            print(msg, completed_process.stdout.decode("utf-8"), sep="\n")
+            return False
         else:
             raise NoApproverFoundError()
