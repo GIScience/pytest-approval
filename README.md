@@ -80,6 +80,8 @@ def test_verify_string()
 def test_verify_dict()
     # automatic conversion to JSON
     assert verify_json({"msg": "Hello World!"})
+    # works with string as well
+    assert verify_json('{"msg": "Hello World!"}')
 ```
 
 
@@ -105,6 +107,30 @@ def test_verify_image(image):
 def test_verify_image_pillow(image):
     image = Image.open("my_image.jpg")
     assert verify_image_pillow(image, extension=".jpg")
+```
+
+
+Plotly figures can be verified as well. For comparison the JSON representation of a Plotly figure is used and for reporting the image representation.
+
+```python
+from pytest_approval import verify_plotly
+import plotly.graph_objects as go
+
+FIGURE = go.Figure(
+    data=go.Contour(
+        z=[
+            [10, 10.625, 12.5, 15.625, 20],
+            [5.625, 6.25, 8.125, 11.25, 15.625],
+            [2.5, 3.125, 5.0, 8.125, 12.5],
+            [0.625, 1.25, 3.125, 6.25, 10.625],
+            [0, 0.625, 2.5, 5.625, 10],
+        ]
+    )
+)
+
+
+def test_verify_plotly():
+    assert verify_plotly(FIGURE)
 ```
 
 
