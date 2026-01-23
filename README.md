@@ -76,11 +76,11 @@ Verify text:
 from pytest_approval import verify, verify_json
 
 
-def test_verify_string()
+def test_verify_string():
     assert verify("Hello World!")
 
 
-def test_verify_dict()
+def test_verify_dict():
     # automatic conversion to JSON
     assert verify_json({"msg": "Hello World!"})
     # works with string as well
@@ -144,7 +144,7 @@ to report, even though both are equal:
 from pytest_approval import verify
 
 
-def test_verify_string()
+def test_verify_string():
     assert verify("Hello World!", report_always=True)
 ```
 
