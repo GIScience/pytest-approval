@@ -212,6 +212,7 @@ The path is relative to pytest root (usually `pyproject.toml`).
 uv sync --all-extras
 uv run pre-commit install
 uv run pytest
+uv run pytest --markdown-docs -m markdown-docs README.md
 ```
 
 ### Release
