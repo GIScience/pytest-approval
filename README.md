@@ -46,7 +46,7 @@ PyCharm and Visual Studio Code can work with images as well.
 
 OS
 - Linux/Unix
-- MacOS
+- macOS
 
 One of following programs installed:
 - PyCharm
@@ -141,7 +141,7 @@ During development its sometimes helpful to show received and approved output,
 to report, even though both are equal:
 
 ```python
-from pytest_approval import verify, verify_json
+from pytest_approval import verify
 
 
 def test_verify_string()
