@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Current Main
+## 0.10.0
 
 - fix: use last `]` of pytest node ID for computing hash naming  (#999a298)
     - previously naming of parametrized tests produced unexpected name if parameter
