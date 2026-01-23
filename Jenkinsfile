@@ -54,6 +54,7 @@ pipeline {
                 script {
                     // run pytest
                     sh 'pytest --cov=pytest_approval --cov-report=xml tests'
+                    sh 'pytest --markdown-docs -m markdown-docs README.md'
                     // run static analysis with sonar-scanner
                     def scannerHome = tool 'SonarScanner 4'
                     withSonarQubeEnv('sonarcloud GIScience/ohsome') {
