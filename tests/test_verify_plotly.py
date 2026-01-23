@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import plotly.graph_objects as go
@@ -33,11 +34,24 @@ def test_verify_plotly(figure):
     assert verify_plotly(figure)
 
 
-def test_verify_plotly_report_always(monkeypatch, fake_process):
+@pytest.mark.skipif(
+    os.environ.get("CI", None) is not None,
+    reason="In CI environ Plotly can not export an image.",
+)
+def test_verify_plotly_report_always(fake_process):
     fake_process.register_subprocess(["pycharm", fake_process.any()])
     fake_process.allow_unregistered(True)
     assert not verify_plotly(FIG, report_always=True)
     assert fake_process.call_count(["pycharm", fake_process.any()]) == 1
+
+
+@pytest.mark.skipif(
+    os.environ.get("CI", None) is None,
+    reason="In PC environ Plotly can export an image.",
+)
+def test_verify_plotly_report_always_2():
+    # Same as above test but this time expect verification to be successful
+    assert verify_plotly(FIG, report_always=True)
 
 
 def test_verify_ploty_not_approved(monkeypatch):
