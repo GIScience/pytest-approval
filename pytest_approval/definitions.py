@@ -108,6 +108,50 @@ REPORTERS_BINARY: list[list[str]] = [
         "%approved",
     ],
     [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: new instance
+        "-n",
+        # -a: application
+        "-a",
+        "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",
+        "--args",
+        "diff",
+        "%received",
+        "%approved",
+    ],
+    [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: New instance
+        "-n",
+        # -a: Application
+        "-a",
+        "/Applications/PyCharm CE.app/Contents/MacOS/pycharm",
+        "--args",
+        "diff",
+        "%received",
+        "%approved",
+    ],
+    [
+        "/usr/bin/open",
+        # -W: Wait until the application is closed
+        "-W",
+        # -n: New instance
+        "-n",
+        # -a: Application
+        "-a",
+        "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",
+        "--args",
+        "--new-window",
+        "--wait",
+        "--diff",
+        "%received",
+        "%approved",
+    ],
+    [
         "diff",
         "--unified",
         "--color",
