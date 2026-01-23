@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.12.0
+
+- fix: add pycharm and code programs paths for macOS to BINARY_REPORER (#c2ae2be)
+- build: run uv sync --upgrade (#f08e0ab)
+- docs: various improvements to the documentation
+- build(ci): run pytest-markdown-docs in CI (#8544303)
+
 ## 0.11.0
 
 - fix: use last `]` of pytest node ID for computing hash naming  (#999a298)
