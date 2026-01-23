@@ -3,6 +3,7 @@
 set -e
 
 git switch main
+$EDITOR ../CHANGELOG.md
 uv version "$1"
 git add ../pyproject.toml
 git add ../uv.lock
