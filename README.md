@@ -62,6 +62,9 @@ uv add pytest-approval
 
 # Including image support
 uv add --optional image pytest-approval
+
+# Including plotly support
+uv add --optional plotly pytest-approval
 ```
 
 
