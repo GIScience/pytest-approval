@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Current Main
+
+- build/tests: add pytest-randomly to run tests in random order (#2296c6f)
+
 ## 0.12.0
 
 - fix: add pycharm and code programs paths for macOS to BINARY_REPORER (#c2ae2be)
