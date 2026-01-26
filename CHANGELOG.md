@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Current Main
+
+* fix: use new commands to open PyCharm on macOS and via Flatpak (3d2ba87)
+
 ## 0.13.0
 
 - build/tests: add pytest-randomly to run tests in random order (#2296c6f)
