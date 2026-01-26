@@ -210,7 +210,7 @@ The path is relative to pytest root (usually `pyproject.toml`).
 
 ```sh
 uv sync --all-extras
-uv run pre-commit install
+uv run prek install  # pre-commit hooks
 uv run pytest
 uv run pytest --markdown-docs -m markdown-docs README.md
 ```
