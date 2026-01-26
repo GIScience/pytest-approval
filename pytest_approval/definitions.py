@@ -5,6 +5,7 @@ from pytest_approval.config import _read_config
 
 BASE_DIR = Path(__file__).parent.resolve()
 
+# TODO: Use dict instead of list
 REPORTERS_TEXT: list[list[str]] = [
     [
         "meld",
