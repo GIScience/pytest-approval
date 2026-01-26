@@ -1,9 +1,10 @@
 # CHANGELOG
 
-## Current Main
+## 0.13.0
 
 - build/tests: add pytest-randomly to run tests in random order (#2296c6f)
 * build(ci)/tests: add pytest-xdist and run tests in CI in parallel (5d663a5)
+* fix: separately try to import verify_plotly and verify_image_pillow (57858a1)
 
 ## 0.12.0
 
