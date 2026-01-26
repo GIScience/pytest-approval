@@ -42,6 +42,7 @@ dev = [
     "pytest-markdown-docs>=0.9.0",
     "pytest-randomly>=4.0.1",
     "pytest-subprocess>=1.5.3", # in sync w/ pre-commit
+    "pytest-xdist>=3.8.0",
     "ruff>=0.14.14",
 ]
 

@@ -55,6 +55,7 @@ pipeline {
                     // run pytest
                     sh 'pytest --cov=pytest_approval --cov-report=xml tests'
                     sh 'pytest --markdown-docs -m markdown-docs README.md'
+                    sh 'pytest --n auto'  // test if library works with pytest-xdist
                     // run static analysis with sonar-scanner
                     def scannerHome = tool 'SonarScanner 4'
                     withSonarQubeEnv('sonarcloud GIScience/ohsome') {
