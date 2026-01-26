@@ -18,10 +18,24 @@ REPORTERS_TEXT: list[list[str]] = [
         "%approved",
     ],
     [
+        str(Path.home().resolve()) + "/.local/share/JetBrains/Toolbox/scripts/pycharm",
+        "diff",
+        "%received",
+        "%approved",
+    ],
+    [
         "/usr/bin/flatpak",
         "run",
-        "com.jetbrains.PyCharm-Community",
+        "com.jetbrains.PyCharm-Professional",
         "diff",
+        "%received",
+        "%approved",
+    ],
+    [
+        "code",
+        "--new-window",
+        "--wait",
+        "--diff",
         "%received",
         "%approved",
     ],
@@ -41,26 +55,13 @@ REPORTERS_TEXT: list[list[str]] = [
         "-n",
         # -a: application
         "-a",
-        "/Applications/PyCharm Professional Edition.app/Contents/MacOS/pycharm",
+        "PyCharm.app",
         "--args",
         "diff",
         "%received",
         "%approved",
     ],
-    [
-        "/usr/bin/open",
-        # -W: Wait until the application is closed
-        "-W",
-        # -n: New instance
-        "-n",
-        # -a: Application
-        "-a",
-        "/Applications/PyCharm CE.app/Contents/MacOS/pycharm",
-        "--args",
-        "diff",
-        "%received",
-        "%approved",
-    ],
+    # TODO: https://www.jetbrains.com/help/pycharm/working-with-the-ide-features-from-command-line.html#toolbox
     [
         "/usr/bin/open",
         # -W: Wait until the application is closed

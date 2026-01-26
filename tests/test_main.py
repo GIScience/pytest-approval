@@ -77,11 +77,17 @@ def test_verify_multiple_calls():
 
 @pytest.mark.parametrize(
     "reporter",
-    (REPORTERS_TEXT[0], REPORTERS_TEXT[2], REPORTERS_TEXT[3]),
+    (
+        REPORTERS_TEXT[0],
+        REPORTERS_TEXT[2],
+        REPORTERS_TEXT[3],
+        REPORTERS_TEXT[4],
+        REPORTERS_TEXT[5],
+    ),
 )
 def test_verify_string_all_reporter(reporter, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
-    assert verify("Hello World!")
+    assert verify("Hello World!", report_always=True)
 
 
 def test_verify_gnu_diff_tools_approver(monkeypatch, capsys: pytest.CaptureFixture):
