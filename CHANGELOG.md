@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## Current Main
+## 0.14.0
 
 * fix: use new commands to open PyCharm on macOS and via Flatpak (3d2ba87)
+* refactor: make list of reporters a dict and add binary flag (9dfc351) 
 
 ## 0.13.0
 
