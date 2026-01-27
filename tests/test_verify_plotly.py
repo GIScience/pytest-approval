@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import pytest
 
 from pytest_approval import verify_plotly
-from pytest_approval.definitions import REPORTERS_BINARY
+from pytest_approval.definitions import REPORTERS
 from pytest_approval.main import NAMES_WITHOUT_EXTENSION, _name
 
 FIG = go.Figure(
@@ -56,7 +56,7 @@ def test_verify_plotly_report_always_2():
 
 def test_verify_ploty_not_approved(monkeypatch):
     # Are the all files (.json and .png) removed even if no approval was given?
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_BINARY", [REPORTERS_BINARY[-1]])
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
     assert not verify_plotly(FIG)
     NAMES_WITHOUT_EXTENSION.pop()
     received, approved = _name()

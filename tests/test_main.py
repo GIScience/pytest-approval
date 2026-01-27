@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from pytest_approval import scrub, verify
-from pytest_approval.definitions import REPORTERS_TEXT
+from pytest_approval.definitions import REPORTERS
 from pytest_approval.main import _name
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
@@ -76,26 +76,62 @@ def test_verify_multiple_calls():
 
 
 @pytest.mark.parametrize(
-    "reporter",
+    "reporters",
     (
-        REPORTERS_TEXT[0],
-        REPORTERS_TEXT[2],
-        REPORTERS_TEXT[3],
-        REPORTERS_TEXT[4],
-        REPORTERS_TEXT[5],
+        {"meld": REPORTERS["meld"]},
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][0],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][1],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][2],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "code": {
+                "commands": [
+                    REPORTERS["code"]["commands"][0],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "code": {
+                "commands": [
+                    REPORTERS["code"]["commands"][1],
+                ],
+                "binary": True,
+            }
+        },
     ),
 )
-def test_verify_string_all_reporter(reporter, monkeypatch):
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [reporter])
-    assert verify("Hello World!", report_always=True)
+def test_verify_string_all_reporter(reporters, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", reporters)
+    assert verify("Hello World!")
 
 
 def test_verify_gnu_diff_tools_approver(monkeypatch, capsys: pytest.CaptureFixture):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", [REPORTERS_TEXT[-1]])
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
     assert not verify("Hello World!")
     stdout, _ = capsys.readouterr()
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_TEXT", REPORTERS_TEXT)
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", REPORTERS)
     pattern = r"^\t\/.*\/([^\/]*(received|approved)\.txt)$"
     replacement = r"\t\1"
     log = re.sub(pattern, replacement, stdout, flags=re.MULTILINE)

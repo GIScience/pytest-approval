@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import zlib
 from io import BytesIO
+from itertools import chain
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
@@ -32,8 +33,7 @@ from pytest_approval.compare import compare_files, compare_image_contents_only
 from pytest_approval.definitions import (
     BASE_DIR,
     BINARY_EXTENSIONS,
-    REPORTERS_BINARY,
-    REPORTERS_TEXT,
+    REPORTERS,
 )
 from pytest_approval.utils import sort_dict
 
@@ -346,13 +346,14 @@ def _count(file_path: str) -> str:
 
 
 def _report(received: Path, approved: Path):
-    if os.environ.get("CI", None) is not None:
-        reporters = [REPORTERS_TEXT[-1]]
+    if os.environ.get("CI") is not None:
+        reporters = {"diff": REPORTERS["diff"]}
     elif received.suffix in BINARY_EXTENSIONS:
-        reporters = REPORTERS_BINARY
+        reporters = {k: v for k, v in REPORTERS.items() if v["binary"]}
     else:
-        reporters = REPORTERS_TEXT
-    for command in reporters:
+        reporters = REPORTERS
+    commands = [r["commands"] for r in reporters.values()]
+    for command in list(chain.from_iterable(commands)):
         command = [c.replace("%received", str(received)) for c in command]
         command = [c.replace("%approved", str(approved)) for c in command]
         try:

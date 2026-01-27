@@ -7,16 +7,64 @@ import pytest
 from pytest_approval import verify, verify_binary
 from pytest_approval.definitions import (
     BINARY_EXTENSIONS,
-    REPORTERS_BINARY,
+    REPORTERS,
 )
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
 
 
-# TODO read empty files for extension and verify it:
-@pytest.mark.parametrize("extension", BINARY_EXTENSIONS)
-def test_verify_binary(extension, monkeypatch):
-    monkeypatch.setattr("pytest_approval.main.REPORTERS_BINARY", [REPORTERS_BINARY[1]])
+@pytest.fixture(params=BINARY_EXTENSIONS)
+def extension(request):
+    return request.param
+
+
+@pytest.mark.parametrize(
+    "reporters",
+    (
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][0],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][1],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][2],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "code": {
+                "commands": [
+                    REPORTERS["code"]["commands"][0],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "code": {
+                "commands": [
+                    REPORTERS["code"]["commands"][1],
+                ],
+                "binary": True,
+            }
+        },
+    ),
+)
+def test_verify_binary(reporters, extension, monkeypatch):
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", REPORTERS)
     with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
         data = file.read()
 
