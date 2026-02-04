@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Current Main
+
+* feat: support pycharm via snap (5e4727a)
+
 ## 0.14.0
 
 * fix: use new commands to open PyCharm on macOS and via Flatpak (3d2ba87)
