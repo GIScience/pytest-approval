@@ -7,7 +7,7 @@ import pytest
 
 from pytest_approval import scrub, verify
 from pytest_approval.definitions import REPORTERS
-from pytest_approval.main import _name
+from pytest_approval.main import _name, verify_json
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
 
@@ -104,6 +104,30 @@ def test_verify_multiple_calls():
             }
         },
         {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][3],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][4],
+                ],
+                "binary": True,
+            }
+        },
+        {
+            "pycharm": {
+                "commands": [
+                    REPORTERS["pycharm"]["commands"][5],
+                ],
+                "binary": True,
+            }
+        },
+        {
             "code": {
                 "commands": [
                     REPORTERS["code"]["commands"][0],
@@ -121,9 +145,9 @@ def test_verify_multiple_calls():
         },
     ),
 )
-def test_verify_string_all_reporter(reporters, monkeypatch):
+def test_verify_all_reporter(reporters, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS", reporters)
-    assert verify("Hello World!")
+    assert verify_json(reporters)
 
 
 def test_verify_gnu_diff_tools_approver(monkeypatch, capsys: pytest.CaptureFixture):

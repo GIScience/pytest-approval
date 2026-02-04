@@ -1,0 +1,15 @@
+{
+ "pycharm": {
+  "commands": [
+   [
+    "/usr/bin/snap",
+    "run",
+    "pycharm",
+    "diff",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": true
+ }
+}

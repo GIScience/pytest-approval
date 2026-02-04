@@ -1,0 +1,15 @@
+{
+ "code": {
+  "commands": [
+   [
+    "/usr/bin/code",
+    "--new-window",
+    "--wait",
+    "--diff",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": true
+ }
+}

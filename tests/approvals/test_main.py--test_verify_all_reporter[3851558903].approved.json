@@ -1,0 +1,12 @@
+{
+ "meld": {
+  "commands": [
+   [
+    "meld",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": false
+ }
+}

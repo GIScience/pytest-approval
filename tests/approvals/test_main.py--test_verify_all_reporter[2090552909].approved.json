@@ -1,0 +1,15 @@
+{
+ "pycharm": {
+  "commands": [
+   [
+    "/usr/bin/flatpak",
+    "run",
+    "com.jetbrains.PyCharm-Professional",
+    "diff",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": true
+ }
+}

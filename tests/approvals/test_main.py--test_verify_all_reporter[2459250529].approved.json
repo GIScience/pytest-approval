@@ -1,0 +1,13 @@
+{
+ "pycharm": {
+  "commands": [
+   [
+    "pycharm",
+    "diff",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": true
+ }
+}

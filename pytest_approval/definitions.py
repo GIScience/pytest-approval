@@ -40,6 +40,30 @@ REPORTERS = {
                 "%approved",
             ],
             [
+                "flatpak",
+                "run",
+                "com.jetbrains.PyCharm-Professional",
+                "diff",
+                "%received",
+                "%approved",
+            ],
+            [
+                "/usr/bin/snap",
+                "run",
+                "pycharm",
+                "diff",
+                "%received",
+                "%approved",
+            ],
+            [
+                "snap",
+                "run",
+                "pycharm",
+                "diff",
+                "%received",
+                "%approved",
+            ],
+            [
                 "/usr/bin/open",
                 # -W: Wait until the application is closed
                 "-W",
