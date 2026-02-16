@@ -7,7 +7,7 @@
 [![status: active](https://github.com/GIScience/badges/raw/master/status/active.svg)](https://github.com/GIScience/badges#active)
 
 A simple approval test library utilizing external diff programs such as
-PyCharm and Visual Studio Code to compare approved and received output.
+Meld, PyCharm and Visual Studio Code to compare approved and received output.
 
 ## About
 
