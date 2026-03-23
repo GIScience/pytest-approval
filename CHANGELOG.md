@@ -3,6 +3,7 @@
 ## Current Main
 
 * feat: support pycharm via snap (5e4727a)
+* fix(verify-plotly): remove all temporary png files (b0be441)
 
 ## 0.14.0
 
