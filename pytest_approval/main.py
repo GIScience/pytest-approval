@@ -173,8 +173,9 @@ if PLOTLY_AVAILABLE:
         )
 
         # Remove images
-        path.with_suffix(path.suffix + ".received.png").unlink(missing_ok=True)
-        path.with_suffix(path.suffix + ".approved.png").unlink(missing_ok=True)
+        filename = path.name
+        directory = path.parent
+        [file.unlink() for file in directory.glob(filename + "*.png")]
 
         # Create approved file with Plotly JSON
         if success:

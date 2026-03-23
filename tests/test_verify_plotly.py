@@ -4,7 +4,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import pytest
 
-from pytest_approval import verify_plotly
+from pytest_approval import verify_plotly, verify
 from pytest_approval.definitions import REPORTERS
 from pytest_approval.main import NAMES_WITHOUT_EXTENSION, _name
 
@@ -64,3 +64,19 @@ def test_verify_ploty_not_approved(monkeypatch):
     received = Path(str(received).replace(".txt", ".json"))
     assert not approved.exists()
     received.unlink()
+
+
+def test_verify_plotly_two_calls_to_verify(monkeypatch):
+    # This covers a bug where the second image written to disk has not been removed
+    # monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
+    verify("foo")
+    verify_plotly(FIG)
+    name = Path(NAMES_WITHOUT_EXTENSION.pop())
+    assert Path(name).with_suffix(name.suffix + ".approved.txt").exists()
+    assert Path(name).with_suffix(name.suffix + ".2.approved.json").exists()
+
+    assert not Path(name).with_suffix(name.suffix + ".2.approved.png").exists()
+
+    assert not Path(name).with_suffix(name.suffix + ".received.txt").exists()
+    assert not Path(name).with_suffix(name.suffix + ".2.received.json").exists()
+    assert not Path(name).with_suffix(name.suffix + ".2.reiceived.png").exists()
