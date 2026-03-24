@@ -90,14 +90,6 @@ def test_verify_multiple_calls():
         {
             "pycharm": {
                 "commands": [
-                    REPORTERS["pycharm"]["commands"][1],
-                ],
-                "binary": True,
-            }
-        },
-        {
-            "pycharm": {
-                "commands": [
                     REPORTERS["pycharm"]["commands"][2],
                 ],
                 "binary": True,
@@ -151,6 +143,24 @@ def test_verify_all_reporter(reporters, monkeypatch):
         "pytest_approval.main.is_continuous_environment",
         lambda: False,
     )
+    assert verify_json(reporters)
+
+
+@pytest.mark.skipif(
+    os.environ.get("CI") is not None,
+    reason="Skipping because test mocks CI environment",
+)
+def test_verify_pycharm_reporter_w_absolute_path(monkeypatch):
+    # This PyCharm reporter has a path which depends on the Home directory of the user.
+    reporters = {
+        "pycharm": {
+            "commands": [
+                REPORTERS["pycharm"]["commands"][1],
+            ],
+            "binary": True,
+        }
+    }
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", reporters)
     assert verify_json(reporters)
 
 

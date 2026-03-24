@@ -1,0 +1,13 @@
+{
+ "pycharm": {
+  "commands": [
+   [
+    "/home/matthias/.local/share/JetBrains/Toolbox/scripts/pycharm",
+    "diff",
+    "%received",
+    "%approved"
+   ]
+  ],
+  "binary": true
+ }
+}
