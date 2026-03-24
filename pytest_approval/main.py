@@ -347,7 +347,7 @@ def _count(file_path: str) -> str:
 
 
 def _report(received: Path, approved: Path):
-    if os.environ.get("CI") is not None:
+    if is_continuous_environment():
         reporters = {"diff": REPORTERS["diff"]}
     elif received.suffix in BINARY_EXTENSIONS:
         reporters = {k: v for k, v in REPORTERS.items() if v["binary"]}
@@ -379,3 +379,7 @@ def _report(received: Path, approved: Path):
             return False
         else:
             raise NoApproverFoundError()
+
+
+def is_continuous_environment() -> bool:
+    return os.environ.get("CI") is not None
