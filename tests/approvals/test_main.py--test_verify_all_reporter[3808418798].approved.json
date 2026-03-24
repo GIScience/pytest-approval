@@ -2,9 +2,9 @@
  "pycharm": {
   "commands": [
    [
-    "flatpak",
+    "/usr/bin/snap",
     "run",
-    "com.jetbrains.PyCharm-Professional",
+    "pycharm",
     "diff",
     "%received",
     "%approved"

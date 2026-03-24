@@ -2,7 +2,7 @@
  "pycharm": {
   "commands": [
    [
-    "/usr/bin/flatpak",
+    "flatpak",
     "run",
     "com.jetbrains.PyCharm-Professional",
     "diff",

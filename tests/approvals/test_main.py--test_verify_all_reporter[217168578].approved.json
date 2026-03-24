@@ -1,11 +1,11 @@
 {
- "pycharm": {
+ "code": {
   "commands": [
    [
-    "snap",
-    "run",
-    "pycharm",
-    "diff",
+    "code",
+    "--new-window",
+    "--wait",
+    "--diff",
     "%received",
     "%approved"
    ]

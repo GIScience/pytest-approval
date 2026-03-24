@@ -2,7 +2,7 @@
  "code": {
   "commands": [
    [
-    "code",
+    "/usr/bin/code",
     "--new-window",
     "--wait",
     "--diff",

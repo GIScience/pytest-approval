@@ -2,7 +2,9 @@
  "pycharm": {
   "commands": [
    [
-    "/home/matthias/.local/share/JetBrains/Toolbox/scripts/pycharm",
+    "/usr/bin/flatpak",
+    "run",
+    "com.jetbrains.PyCharm-Professional",
     "diff",
     "%received",
     "%approved"
