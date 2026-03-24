@@ -4,7 +4,7 @@ from pathlib import Path
 import plotly.graph_objects as go
 import pytest
 
-from pytest_approval import verify_plotly, verify
+from pytest_approval import verify, verify_plotly
 from pytest_approval.definitions import REPORTERS
 from pytest_approval.main import NAMES_WITHOUT_EXTENSION, _name
 
