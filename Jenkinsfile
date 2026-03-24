@@ -17,7 +17,7 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Install project') {
             steps {
                 script {
                     echo REPO_NAME
@@ -41,6 +41,25 @@ pipeline {
             post {
                 failure {
                   rocket_buildfail()
+                }
+            }
+        }
+
+        stage('Static analysis') {
+            environment {
+                VIRTUAL_ENV="${WORKSPACE}/.venv"
+                PATH="${VIRTUAL_ENV}/bin:${PATH}"
+            }
+            steps {
+                script {
+                    // run other static code analysis
+                    sh 'ruff format --check --diff .'
+                    sh 'ruff check .'
+                }
+            }
+            post {
+                failure {
+                  rocket_testfail()
                 }
             }
         }
@@ -74,9 +93,6 @@ pipeline {
                         }
                         sh "${scannerHome}/bin/sonar-scanner " + SONAR_CLI_PARAMETER
                     }
-                    // run other static code analysis
-                    sh 'ruff format --check --diff .'
-                    sh 'ruff check .'
                 }
             }
             post {
