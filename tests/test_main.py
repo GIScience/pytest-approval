@@ -149,7 +149,7 @@ def test_verify_all_reporter(reporters, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.REPORTERS", reporters)
     monkeypatch.setattr(
         "pytest_approval.main.is_continuous_environment",
-        lambda _: False,
+        lambda: False,
     )
     assert verify_json(reporters)
 
