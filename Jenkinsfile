@@ -35,7 +35,7 @@ pipeline {
                     }
                 }
                 script {
-                    sh 'uv sync --all-extras --locked --no-editable'
+                    sh 'uv sync --all-extras --locked'
                 }
             }
             post {
