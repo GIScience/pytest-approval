@@ -1,11 +1,19 @@
-import pytest
+from pathlib import Path
+from typing import Iterable
 
-from pytest_approval.main import _name
+import pytest
+from pytest_nodeid_to_filepath import get_filepath
 
 
 @pytest.fixture
-def path(monkeypatch):
-    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    _, approved = _name()
-    yield approved
-    approved.unlink(missing_ok=True)
+def approved_path() -> Iterable[Path]:
+    path = get_filepath(extension=".approved.txt", count=False)
+    yield path
+    path.unlink(missing_ok=True)
+
+
+@pytest.fixture
+def received_path() -> Iterable[Path]:
+    path = get_filepath(extension=".received.txt", count=False)
+    yield path
+    path.unlink(missing_ok=True)

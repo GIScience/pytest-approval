@@ -1,12 +1,11 @@
 import os
-from pathlib import Path
 
 import plotly.graph_objects as go
 import pytest
+from pytest_nodeid_to_filepath import get_filepath
 
 from pytest_approval import verify, verify_plotly
 from pytest_approval.definitions import REPORTERS
-from pytest_approval.main import NAMES_WITHOUT_EXTENSION, _name
 
 FIG = go.Figure(
     data=go.Contour(
@@ -54,29 +53,33 @@ def test_verify_plotly_report_always_2():
     assert verify_plotly(FIG, report_always=True)
 
 
-def test_verify_ploty_not_approved(monkeypatch):
+def test_verify_plotly_not_approved(monkeypatch: pytest.MonkeyPatch):
     # Are the all files (.json and .png) removed even if no approval was given?
     monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
-    assert not verify_plotly(FIG)
-    NAMES_WITHOUT_EXTENSION.pop()
-    received, approved = _name()
-    approved = Path(str(approved).replace(".txt", ".json"))
-    received = Path(str(received).replace(".txt", ".json"))
-    assert not approved.exists()
-    received.unlink()
+    filepath = get_filepath(count=False)
+
+    verify_plotly(FIG)
+
+    assert not filepath.with_suffix(filepath.suffix + ".approved.png").exists()
+    assert not filepath.with_suffix(filepath.suffix + ".received.png").exists()
+
+    assert not filepath.with_suffix(filepath.suffix + ".approved.json").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.json").exists()
 
 
 def test_verify_plotly_two_calls_to_verify(monkeypatch):
     # This covers a bug where the second image written to disk has not been removed
-    # monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
+    filepath = get_filepath(count=False)
+
     verify("foo")
     verify_plotly(FIG)
-    name = Path(NAMES_WITHOUT_EXTENSION.pop())
-    assert Path(name).with_suffix(name.suffix + ".approved.txt").exists()
-    assert Path(name).with_suffix(name.suffix + ".2.approved.json").exists()
 
-    assert not Path(name).with_suffix(name.suffix + ".2.approved.png").exists()
+    assert not filepath.with_suffix(filepath.suffix + ".approved.txt").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.txt").exists()
 
-    assert not Path(name).with_suffix(name.suffix + ".received.txt").exists()
-    assert not Path(name).with_suffix(name.suffix + ".2.received.json").exists()
-    assert not Path(name).with_suffix(name.suffix + ".2.reiceived.png").exists()
+    assert not filepath.with_suffix(filepath.suffix + ".approved.png").exists()
+    assert not filepath.with_suffix(filepath.suffix + ".received.png").exists()
+
+    assert not filepath.with_suffix(filepath.suffix + ".approved.json").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.json").exists()

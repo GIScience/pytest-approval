@@ -64,7 +64,7 @@ def extension(request):
     ),
 )
 def test_verify_binary(reporters, extension, monkeypatch):
-    monkeypatch.setattr("pytest_approval.main.REPORTERS", REPORTERS)
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", reporters)
     with open(FIXTURE_DIR / f"binary{extension}", "rb") as file:
         data = file.read()
 

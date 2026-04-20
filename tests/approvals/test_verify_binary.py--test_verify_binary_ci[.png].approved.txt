@@ -1,0 +1,6 @@
+Received is different from approved:
+	test_verify_binary.py--test_verify_binary_ci[.png].received.png
+	test_verify_binary.py--test_verify_binary_ci[.png].approved.png
+
+Binary files received and approved differ
+

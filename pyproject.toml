@@ -1,22 +1,9 @@
 [project]
 name = "pytest-approval"
 version = "0.15.1"
-authors = [{name="HeiGIT ohsome team", email="ohsome@heigit.org"}]
 description = "A simple approval test library utilizing external diff programs such as PyCharm and Visual Studio Code to compare approved and received output."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
-classifiers = [
-    "Framework :: Pytest",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Testing",
-]
 license = "LGPL-3.0-only"
 license-files = ["COPYING*"]
 authors = [{ name = "HeiGIT ohsome team", email = "ohsome@heigit.org" }]
@@ -32,11 +19,11 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
-    "pytest>=8.3.5",
+  "pytest>=8.3.5",
+  "pytest-nodeid-to-filepath",
 ]
 
 [project.urls]
-Homepage = "https://ohsome.org/"
 # TODO: update once dedicated documentation is available
 Documentation = "https://github.com/GIScience/pytest-approval/blob/main/README.md"
 Homepage = "https://ohsome.org/"
@@ -69,6 +56,9 @@ pytest_approval = "pytest_approval.plugin"
 
 [tool.uv.build-backend]
 module-root = ""
+
+[tool.uv.sources]
+pytest-nodeid-to-filepath = { git = "https://github.com/GIScience/pytest-nodeid-to-filepath.git" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

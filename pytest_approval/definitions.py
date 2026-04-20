@@ -4,7 +4,7 @@ from pytest_approval.config import _read_config
 
 BASE_DIR = Path(__file__).parent.resolve()
 
-# Order matters: First working reporter is found by going thorugh this list one-by-one
+# Order matters: First working reporter is found by going through this list one-by-one
 REPORTERS = {
     "meld": {
         "commands": [

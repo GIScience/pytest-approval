@@ -3,11 +3,13 @@ import logging
 import os
 import shutil
 import subprocess
-import zlib
 from io import BytesIO
 from itertools import chain
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Literal
+
+from pytest_nodeid_to_filepath import get_filepath
+from pytest_nodeid_to_filepath.main import FILEPATHS  # HACK
 
 if TYPE_CHECKING:
     # Always true for type checker. Always false during runtime.
@@ -43,8 +45,6 @@ logger = logging.getLogger(__name__)
 ROOT_DIR: str = ""
 APPROVALS_DIR: str = ""
 AUTO_APPROVE: bool = False
-
-NAMES_WITHOUT_EXTENSION: list[str] = []  # keep track of duplicated file names
 
 
 class NoApproverFoundError(FileNotFoundError):
@@ -164,8 +164,6 @@ if PLOTLY_AVAILABLE:
         # Second verify Image with reporting (Report image) if JSON is different
         figure = Figure(json.loads(data_json))
         data_image = figure.to_image(format="png")
-        # HACK: Remove name generated in previous call to verify w/ JSON
-        path = Path(NAMES_WITHOUT_EXTENSION.pop())
         success = verify_image(
             data_image,
             extension=".png",
@@ -173,13 +171,16 @@ if PLOTLY_AVAILABLE:
         )
 
         # Remove images
+        path = get_filepath(count=False)
         filename = path.name
         directory = path.parent
         [file.unlink() for file in directory.glob(filename + "*.png")]
 
         # Create approved file with Plotly JSON
         if success:
-            NAMES_WITHOUT_EXTENSION.pop()  # HACK
+            # HACK: Remove paths generated in previous call to verify w/ JSON
+            FILEPATHS.pop()  # received
+            FILEPATHS.pop()  # approved
             _verify(
                 data_json,
                 extension=".json",
@@ -223,7 +224,8 @@ def _verify(
     compare: Callable = compare_files,
     scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
-    received, approved = _name(extension)
+    received = get_filepath(extension=".received" + extension)
+    approved = get_filepath(extension=".approved" + extension)
     _write(data, received, approved, scrub)
     if AUTO_APPROVE or auto_approve:
         shutil.copyfile(received, approved)
@@ -292,58 +294,6 @@ def _write_text(
     received.write_text(data)
     if not approved.exists():
         approved.touch()
-
-
-def _name(extension=".txt") -> tuple[Path, Path]:
-    # TODO: Try out with xdist
-    node_id = os.environ["PYTEST_CURRENT_TEST"]
-    if "[" in node_id and "]" in node_id:
-        # TODO: Only use hash if params are loo long or special chars are present
-        start = node_id.index("[") + 1
-        end = node_id.rindex("]")
-        params = node_id[start:end]
-        hash_ = str(zlib.crc32(params.encode("utf-8")))
-    else:
-        params = ""
-        hash_ = ""
-    file_path = (
-        node_id.replace(" (call)", "")
-        .replace(" (setup)", "")
-        .replace(" (teardown)", "")
-        .replace("::", "--")
-        .replace(params, hash_)
-    )
-    if APPROVALS_DIR:
-        file_path = Path(file_path)
-        # find common parents between approved dir and file path, both
-        # relative to pytest root, and remove them
-        for i, part in enumerate(Path(APPROVALS_DIR).parts):
-            if part == file_path.parts[i]:
-                continue
-            else:
-                break
-        else:
-            i = 0
-        file_path = str(Path(*file_path.parts[i:]))
-    file_path = str(Path(ROOT_DIR) / Path(APPROVALS_DIR) / Path(file_path))
-    count = _count(file_path)
-    return (
-        Path(file_path + count + ".received" + extension),
-        Path(file_path + count + ".approved" + extension),
-    )
-
-
-def _count(file_path: str) -> str:
-    """Count generated names which are the same.
-
-    This means `verify` has been called multiple times in one test function.
-    """
-    NAMES_WITHOUT_EXTENSION.append(file_path)
-    count = NAMES_WITHOUT_EXTENSION.count(file_path)
-    if count == 1:
-        return ""
-    else:
-        return "." + str(count)
 
 
 def _report(received: Path, approved: Path):

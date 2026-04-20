@@ -5,31 +5,22 @@ from pathlib import Path
 
 import pytest
 
-from pytest_approval import scrub, verify
+from pytest_approval import scrub, verify, verify_json
 from pytest_approval.definitions import REPORTERS
-from pytest_approval.main import _name, verify_json
 
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
 
 
 @pytest.fixture
-def approved(monkeypatch):
-    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    received, approved = _name()
-    with open(approved, "w") as file:
+def approved_file(approved_path):
+    with open(approved_path, "w") as file:
         file.write("Hello World!\n")
-    yield approved
-    received.unlink(missing_ok=True)
-    approved.unlink(missing_ok=True)
 
 
 @pytest.fixture
-def approved_different(monkeypatch):
-    monkeypatch.setattr("pytest_approval.main._count", lambda _: "")
-    _, approved = _name()
-    with open(approved, "w") as file:
+def approved_file_different(approved_path):
+    with open(approved_path, "w") as file:
         file.write("hello world")
-    yield approved
 
 
 @pytest.mark.parametrize("string", ("Hello World!", "(id:(node/1, way/2))"))
@@ -176,7 +167,7 @@ def test_verify_gnu_diff_tools_approver(monkeypatch, capsys: pytest.CaptureFixtu
     assert verify(log)
 
 
-@pytest.mark.usefixtures("approved")
+@pytest.mark.usefixtures("approved_file")
 def test_verify_approved_equal(fake_process, monkeypatch):
     monkeypatch.delenv("CI", raising=False)
     fake_process.register_subprocess(["meld", fake_process.any()])
@@ -184,7 +175,7 @@ def test_verify_approved_equal(fake_process, monkeypatch):
     assert fake_process.call_count(["meld", fake_process.any()]) == 0
 
 
-@pytest.mark.usefixtures("approved")
+@pytest.mark.usefixtures("approved_file")
 def test_verify_approved_equal_report_always(fake_process, monkeypatch):
     fake_process.register_subprocess(["meld", fake_process.any()])
     monkeypatch.delenv("CI", raising=False)
@@ -192,7 +183,7 @@ def test_verify_approved_equal_report_always(fake_process, monkeypatch):
     assert fake_process.call_count(["meld", fake_process.any()]) == 1
 
 
-@pytest.mark.usefixtures("approved_different")
+@pytest.mark.usefixtures("approved_file_different")
 def test_verify_approved_different(fake_process, monkeypatch):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", False)
     monkeypatch.delenv("CI", raising=False)
@@ -227,11 +218,11 @@ def test_verify_different_returncode_127(fake_process, caplog, monkeypatch):
     assert fake_process.call_count(["pycharm", fake_process.any()]) == 1
 
 
-def test_auto_approval(monkeypatch, path):
+def test_auto_approval(monkeypatch, approved_path):
     monkeypatch.setattr("pytest_approval.main.AUTO_APPROVE", True)
-    assert not path.exists()
+    assert not approved_path.exists()
     assert verify("new content")
-    assert path.exists()
+    assert approved_path.exists()
 
 
 @pytest.mark.skipif(
@@ -240,8 +231,8 @@ def test_auto_approval(monkeypatch, path):
 )
 def test_verify_ci(monkeypatch, capsys: pytest.CaptureFixture):
     """In CI gnu diff reporter should be used."""
-    with monkeypatch.context() as m:
-        m.setenv("CI", "Jenkins")
+    with monkeypatch.context() as mp:
+        mp.setenv("CI", "Jenkins")
         assert not verify("Hello World!")
     stdout, _ = capsys.readouterr()
     # replace host file path
