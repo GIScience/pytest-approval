@@ -44,7 +44,7 @@ Issues = "https://github.com/GISciene/pytest-approval/issues"
 Repository = "https://github.com/GIScience/pytest-approval"
 
 [build-system]
-requires = ["uv_build>=0.9.5,<0.10.0"]
+requires = ["uv_build>=0.9.5,<0.12.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
