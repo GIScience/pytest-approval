@@ -19,6 +19,18 @@ classifiers = [
 ]
 license = "LGPL-3.0-only"
 license-files = ["COPYING*"]
+authors = [{ name = "HeiGIT ohsome team", email = "ohsome@heigit.org" }]
+classifiers = [
+  "Framework :: Pytest",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "pytest>=8.3.5",
 ]
@@ -27,8 +39,9 @@ dependencies = [
 Homepage = "https://ohsome.org/"
 # TODO: update once dedicated documentation is available
 Documentation = "https://github.com/GIScience/pytest-approval/blob/main/README.md"
-Repository = "https://github.com/GIScience/pytest-approval"
+Homepage = "https://ohsome.org/"
 Issues = "https://github.com/GISciene/pytest-approval/issues"
+Repository = "https://github.com/GIScience/pytest-approval"
 
 [build-system]
 requires = ["uv_build>=0.9.5,<0.10.0"]
@@ -36,25 +49,20 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
-    "hypothesis>=6.150.0",
-    "prek>=0.3.0",
-    "pytest-cov>=7.0.0",
-    "pytest-markdown-docs>=0.9.0",
-    "pytest-randomly>=4.0.1",
-    "pytest-subprocess>=1.5.3", # in sync w/ pre-commit
-    "pytest-xdist>=3.8.0",
-    "ruff>=0.14.14",
+  "hypothesis>=6.150.0",
+  "prek>=0.3.0",
+  "pytest-cov>=7.0.0",
+  "pytest-markdown-docs>=0.9.0",
+  "pytest-randomly>=4.0.1",
+  "pytest-subprocess>=1.5.3",  # in sync w/ pre-commit
+  "pytest-xdist>=3.8.0",
+  "ruff>=0.14.14",
+  "ty>=0.0.31",
 ]
 
 [project.optional-dependencies]
-image = [
-    "numpy>=2.3.1",
-    "pillow>=11.3.0"
-]
-plotly = [
-    "kaleido>=1.2.0",
-    "plotly>=6.0"
-]
+image = ["numpy>=2.3.1", "pillow>=11.3.0"]
+plotly = ["kaleido>=1.2.0", "plotly>=6.0"]
 
 [project.entry-points.pytest11]
 pytest_approval = "pytest_approval.plugin"
@@ -67,26 +75,26 @@ testpaths = ["tests"]
 
 [tool.ruff.lint]
 select = [
-    "A",    # flake8-builtins
-    "E",    # pycodestyle Error
-    "F",    # Pyflakes
-    "I",    # isort
-    "N",    # pep8-nameing
-    "Q",    # flake8-quotes
-    "W",    # pycodestyle Warning
-    "C90",  # mccabe
-    "TRY",  # tryceratops
-    "RUF",  # ruff-specific rules
-    "FURB", # refurb
-    "PERF", # perflint
-    "S",    # bandit
-    "B",    # bugbear
-    "SIM",  # simplify
-    "LOG",  # flake8-logging
+  "A",  # flake8-builtins
+  "E",  # pycodestyle Error
+  "F",  # Pyflakes
+  "I",  # isort
+  "N",  # pep8-nameing
+  "Q",  # flake8-quotes
+  "W",  # pycodestyle Warning
+  "C90",  # mccabe
+  "TRY",  # tryceratops
+  "RUF",  # ruff-specific rules
+  "FURB",  # refurb
+  "PERF",  # perflint
+  "S",  # bandit
+  "B",  # bugbear
+  "SIM",  # simplify
+  "LOG",  # flake8-logging
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/*" = ["S101"]  # S101 usage of asserts
 
 [tool.pytest-approval]
-"approvals-dir"="tests/approvals"
+"approvals-dir" = "tests/approvals"
