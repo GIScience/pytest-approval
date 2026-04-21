@@ -2,6 +2,7 @@
 
 ## Main
 
+* build: upgrade Pytest to version 9 (23b139b)
 * factor out naming logic to [pytest-nodeid-to-filepath](https://github.com/GIScience/pytest-nodeid-to-filepath) library (f109cf2)
     * pytest-nodeid-to-filepath tries to use keep param from the Pytest node
       ID if possible and falls back to hash if not.
