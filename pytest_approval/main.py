@@ -156,7 +156,7 @@ if PLOTLY_AVAILABLE:
 
         # First verify JSON without reporting (Compare JSON)
         success = _verify(data_json, extension=".json", report_suppress=True)
-        if (success and not report_always) or is_continuous_environment:
+        if (success and not report_always) or is_continuous_environment():
             return success
 
         # Second verify Image with reporting (Report image) if JSON is different
