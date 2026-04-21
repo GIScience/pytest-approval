@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Main
+
+* factor out naming logic to [pytest-nodeid-to-filepath](https://github.com/GIScience/pytest-nodeid-to-filepath) library (f109cf2)
+    * pytest-nodeid-to-filepath tries to use keep param from the Pytest node
+      ID if possible and falls back to hash if not.
+* build: bump uv_build to < 0.12 (1de142f)
+* chore: reformat pyproject.toml and remove deprecated license classifier (7031033)
+* build: upgrade ruff (0d1a4ac)
+
 ## 0.15.1
 
 * feat: support pycharm via snap (5e4727a)
