@@ -1,6 +1,6 @@
 [project]
 name = "pytest-approval"
-version = "0.15.1"
+version = "0.16.0"
 description = "A simple approval test library utilizing external diff programs such as PyCharm and Visual Studio Code to compare approved and received output."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"

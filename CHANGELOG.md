@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Main
+## 0.16.0
 
 * fix(verify-plotly): properly clean-up images and get naming right (0ddb6ca)
     * Fix glob pattern to clean-up temporary images.
