@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import subprocess
+from glob import escape
 from io import BytesIO
 from itertools import chain
 from pathlib import Path
@@ -172,13 +173,13 @@ if PLOTLY_AVAILABLE:
         path = get_filepath(count=False)
         filename = path.name
         directory = path.parent
-        [file.unlink() for file in directory.glob(filename + "*.png")]
+        [file.unlink() for file in directory.glob(escape(filename) + "*.png")]
 
         # Create approved file with Plotly JSON
         if success:
             # HACK: Remove paths generated in previous call to verify w/ JSON
-            FILEPATHS.pop()  # received
-            FILEPATHS.pop()  # approved
+            FILEPATHS.pop(-3)  # approved.json
+            FILEPATHS.pop(-3)  # received.json
             _verify(
                 data_json,
                 extension=".json",
