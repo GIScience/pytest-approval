@@ -7,13 +7,17 @@ from pytest_nodeid_to_filepath import get_filepath
 
 @pytest.fixture
 def approved_path() -> Iterable[Path]:
-    path = get_filepath(extension=".approved.txt", count=False)
+    path = get_filepath(
+        extension=".approved.txt", directory="tests/approvals", count=False
+    )
     yield path
     path.unlink(missing_ok=True)
 
 
 @pytest.fixture
 def received_path() -> Iterable[Path]:
-    path = get_filepath(extension=".received.txt", count=False)
+    path = get_filepath(
+        extension=".received.txt", directory="test/approvals", count=False
+    )
     yield path
     path.unlink(missing_ok=True)

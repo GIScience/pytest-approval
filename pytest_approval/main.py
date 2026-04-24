@@ -170,7 +170,7 @@ if PLOTLY_AVAILABLE:
         )
 
         # Remove images
-        path = get_filepath(count=False)
+        path = get_filepath(count=False, directory=APPROVALS_DIR)
         filename = path.name
         directory = path.parent
         [file.unlink() for file in directory.glob(escape(filename) + "*.png")]
@@ -223,8 +223,8 @@ def _verify(
     compare: Callable = compare_files,
     scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
-    received = get_filepath(extension=".received" + extension)
-    approved = get_filepath(extension=".approved" + extension)
+    received = get_filepath(extension=".received" + extension, directory=APPROVALS_DIR)
+    approved = get_filepath(extension=".approved" + extension, directory=APPROVALS_DIR)
     _write(data, received, approved, scrub)
     if AUTO_APPROVE or auto_approve:
         shutil.copyfile(received, approved)

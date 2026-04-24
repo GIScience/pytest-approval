@@ -56,7 +56,7 @@ def test_verify_plotly_report_always_2():
 def test_verify_plotly_not_approved(monkeypatch: pytest.MonkeyPatch):
     # Are the all files (.json and .png) removed even if no approval was given?
     monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
-    filepath = get_filepath(count=False)
+    filepath = get_filepath(directory="tests/approvals", count=False)
 
     verify_plotly(FIG)
 
@@ -70,7 +70,7 @@ def test_verify_plotly_not_approved(monkeypatch: pytest.MonkeyPatch):
 def test_verify_plotly_two_calls_to_verify(monkeypatch):
     # This covers a bug where the second image written to disk has not been removed
     monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
-    filepath = get_filepath(count=False)
+    filepath = get_filepath(directory="tests/approvals", count=False)
 
     verify("foo")
     verify_plotly(FIG)

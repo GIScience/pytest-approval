@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import pytest_nodeid_to_filepath
-
 from pytest_approval import main
 from pytest_approval.definitions import CONFIG
 
@@ -19,8 +17,8 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     main.ROOT_DIR = config.rootpath
     main.AUTO_APPROVE = config.getoption("--auto-approve")
-    approved_dir = CONFIG.get("approvals-dir", None)
-    if approved_dir is not None:
-        pytest_nodeid_to_filepath.main.DIRECTORY = approved_dir
+    approvals_dir = CONFIG.get("approvals-dir", None)
+    if approvals_dir is not None:
+        main.APPROVALS_DIR = approvals_dir
         approved_dir_path = Path(main.ROOT_DIR) / Path(main.APPROVALS_DIR)
         approved_dir_path.mkdir(parents=True, exist_ok=True)
