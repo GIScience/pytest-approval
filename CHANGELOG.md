@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.16.1
+
+* fix: do not write approval dir into pytest-nodeid-to-filepath module (f90c8d0)
+
 ## 0.16.0
 
 * fix(verify-plotly): properly clean-up images and get naming right (0ddb6ca)
