@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.16.2
+
+* build: update dependencies by running `uv sync --all-extras --upgrade` (17c3aa2)
+
 ## 0.16.1
 
 * fix: do not write approval dir into pytest-nodeid-to-filepath module (f90c8d0)
