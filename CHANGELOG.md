@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.17.0
+
+* build: change source of `pytest_nodeid_to_filepath` to pypi (4de2498)
+
 ## 0.16.2
 
 * build: update dependencies by running `uv sync --all-extras --upgrade` (17c3aa2)
