@@ -575,7 +575,7 @@ requires-dist = [
     { name = "pillow", marker = "extra == 'image'", specifier = ">=11.3.0" },
     { name = "plotly", marker = "extra == 'plotly'", specifier = ">=6.0" },
     { name = "pytest", specifier = ">=9.0.3" },
-    { name = "pytest-nodeid-to-filepath", git = "https://github.com/GIScience/pytest-nodeid-to-filepath.git" },
+    { name = "pytest-nodeid-to-filepath", specifier = ">=0.1.0" },
 ]
 provides-extras = ["image", "plotly"]
 
@@ -622,9 +622,13 @@ wheels = [
 [[package]]
 name = "pytest-nodeid-to-filepath"
 version = "0.1.0"
-source = { git = "https://github.com/GIScience/pytest-nodeid-to-filepath.git#445e530cc8f6ecdf6458de29b9cc67fdd89ee536" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/31/41/68d344a6a8eb96de86c8699a189b7eb734d69a4f63630a493c61b8956907/pytest_nodeid_to_filepath-0.1.0.tar.gz", hash = "sha256:1cf93a9f8a008e2eee05869d281bed3b4cc879651d0a245f474360d6a6c00e08", size = 18173, upload-time = "2026-06-23T11:44:48.273Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a3/1a/b4ae4c2fab790636c98e2e904557e44f899503d2ee070f985bf69f724fbd/pytest_nodeid_to_filepath-0.1.0-py3-none-any.whl", hash = "sha256:f3ce7f4d8b6a1deae3b88b43a0db984d69cd913759076c599868e4eb2b65dc22", size = 20082, upload-time = "2026-06-23T11:44:46.883Z" },
 ]
 
 [[package]]

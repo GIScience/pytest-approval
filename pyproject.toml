@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
   "pytest>=9.0.3",
-  "pytest-nodeid-to-filepath",
+  "pytest-nodeid-to-filepath>=0.1.0",
 ]
 
 [project.urls]
@@ -56,9 +56,6 @@ pytest_approval = "pytest_approval.plugin"
 
 [tool.uv.build-backend]
 module-root = ""
-
-[tool.uv.sources]
-pytest-nodeid-to-filepath = { git = "https://github.com/GIScience/pytest-nodeid-to-filepath.git" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
