@@ -2,33 +2,22 @@ import filecmp
 import logging
 from pathlib import Path
 
-from pytest_approval.definitions import BINARY_EXTENSIONS
-
 logger = logging.getLogger(__name__)
+
+
+def compare_text(received: Path, approved: Path) -> bool:
+    logger.debug(f"Compare {received} with {approved}.")
+    return approved.read_text() == received.read_text()
 
 
 def compare_files(received: Path, approved: Path) -> bool:
     logger.debug(f"Compare {received} with {approved}.")
-    if filecmp.cmp(received, approved, shallow=False):
-        return True
-    elif received.suffix not in BINARY_EXTENSIONS:
-        return approved.read_text() == received.read_text()
-    else:
-        return False
-
-
-def compare_files_shallow(received: Path, approved: Path) -> bool:
-    logger.debug(f"Compare {received} with {approved}.")
-    if filecmp.cmp(received, approved, shallow=True):
-        return True
-    elif received.suffix not in BINARY_EXTENSIONS:
-        return approved.read_text() == received.read_text()
-    else:
-        return False
+    return filecmp.cmp(received, approved, shallow=False)
 
 
 def compare_image_contents_only(received: Path, approved: Path) -> bool:
     """Compare image contents without metadata."""
+    logger.debug(f"Compare {received} with {approved}.")
     try:
         import numpy
         from PIL import Image

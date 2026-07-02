@@ -32,7 +32,11 @@ try:
 except ImportError:
     PLOTLY_AVAILABLE = False
 
-from pytest_approval.compare import compare_files, compare_image_contents_only
+from pytest_approval.compare import (
+    compare_files,
+    compare_image_contents_only,
+    compare_text,
+)
 from pytest_approval.definitions import (
     BASE_DIR,
     BINARY_EXTENSIONS,
@@ -65,16 +69,27 @@ def verify(
     Args:
         report_always: Always report even if received and approved are equal.
     """
-    return _verify(data, extension, report_always=report_always, scrub=scrub)
+    return _verify(
+        data,
+        extension,
+        report_always=report_always,
+        compare=compare_text,
+        scrub=scrub,
+    )
 
 
 def verify_binary(
     data: bytes,
     *,
-    extension: Literal[".jpg", ".jpeg", ".png"],
+    extension: str,
     report_always: bool = False,
 ) -> bool:
-    return _verify(data, extension, report_always=report_always)
+    return _verify(
+        data,
+        extension,
+        report_always=report_always,
+        compare=compare_files,
+    )
 
 
 def verify_image(
@@ -96,7 +111,12 @@ def verify_image(
             report_always=report_always,
             compare=compare_image_contents_only,
         )
-    return _verify(data, extension, report_always=report_always)
+    return _verify(
+        data,
+        extension,
+        report_always=report_always,
+        compare=compare_files,
+    )
 
 
 if PIL_AVAILABLE:
@@ -210,13 +230,20 @@ def verify_json(
     elif sort and isinstance(data, list):
         data.sort()
     data = json.dumps(data, indent=True)
-    return _verify(data, extension=extension, report_always=report_always, scrub=scrub)
+    return _verify(
+        data,
+        extension=extension,
+        report_always=report_always,
+        compare=compare_text,
+        scrub=scrub,
+    )
 
 
 def _verify(
     data: Any,
     extension: str,
     *,
+    binary: bool = False,
     report_always: bool = False,
     report_suppress: bool = False,
     auto_approve: bool = False,
