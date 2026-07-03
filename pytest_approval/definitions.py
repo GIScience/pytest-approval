@@ -151,7 +151,7 @@ REPORTERS = {
 BINARY_EXTENSIONS: list[str] = [
     ".jpeg",
     ".jpg",
-    # ".parquet",
+    ".parquet",
     # ".pdf",
     ".png",
 ]
