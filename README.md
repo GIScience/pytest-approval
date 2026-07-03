@@ -70,36 +70,30 @@ uv add --optional plotly pytest-approval
 
 ## Usage
 
-Verify text:
+### Verify Text
 
 ```python
 from pytest_approval import verify, verify_json
 
 
-def test_verify_string():
+def test_verify_as_string():
     assert verify("Hello World!")
 
 
-def test_verify_dict():
+def test_verify_as_json():
     # automatic conversion to JSON
     assert verify_json({"msg": "Hello World!"})
     # works with string as well
     assert verify_json('{"msg": "Hello World!"}')
 ```
 
+### Verify Images
 
-To verify binary files such as an image PyCharm or Visual Studio Code needs to
-be installed. Examples:
+To report images visually make sure PyCharm or Visual Studio Code is installed.
 
 ```python
 from PIL import Image
-from pytest_approval import verify_binary, verify_image, verify_image_pillow
-
-
-def test_verify_binary(image):
-    with open("my_image.jpg", "rb") as file:
-        buffer = file.read()
-    assert verify_binary(buffer, extension=".jpg")
+from pytest_approval import verify_image, verify_image_pillow
 
 
 def test_verify_image(image):
@@ -112,8 +106,9 @@ def test_verify_image_pillow(image):
     assert verify_image_pillow(image, extension=".jpg")
 ```
 
+### Verify Plotly Figures
 
-Plotly figures can be verified as well. For comparison the JSON representation of a Plotly figure is used and for reporting the image representation.
+For comparison the JSON representation of a Plotly figure is used and for reporting the image representation.
 
 ```python
 from pytest_approval import verify_plotly
@@ -136,9 +131,9 @@ def test_verify_plotly():
     assert verify_plotly(FIGURE)
 ```
 
+### Force Reporting
 
-During development its sometimes helpful to show received and approved output,
-to report, even though both are equal:
+During development its sometimes helpful to report even though both are equal:
 
 ```python
 from pytest_approval import verify
@@ -148,9 +143,9 @@ def test_verify_string():
     assert verify("Hello World!", report_always=True)
 ```
 
-### Auto approval
+### Auto Approval
 
-It is possible to run auto approve every approval tests:
+It is possible to automatically approve every tests:
 ```shell
 uv run pytest --auto-approve
 ```
@@ -173,38 +168,6 @@ If you want to save those files in a specific directory instead, please set the 
 
 The path is relative to pytest root (usually `pyproject.toml`).
 
-<!-- ## Configuration -->
-<!---->
-<!-- ### Approver/Reporter -->
-<!---->
-<!-- Per default `pytest-approval` tries a list of diff programs as reporters until a working one is found. -->
-<!---->
-<!-- You can provide your own list in the `pyproject.toml` file: -->
-<!---->
-<!-- ```toml -->
-<!-- [tool.pytest-approval] -->
-<!-- reporters = [ -->
-<!--     [ -->
-<!--         "meld", -->
-<!--         "%received", -->
-<!--         "%approved", -->
-<!--     ], -->
-<!--     [ -->
-<!--         "diff", -->
-<!--         "--unified", -->
-<!--         "--color", -->
-<!--         "--suppress-common-lines", -->
-<!--         "--label", -->
-<!--         "received", -->
-<!--         "--label", -->
-<!--         "approved", -->
-<!--         "%received", -->
-<!--         "%approved", -->
-<!--     ], -->
-<!-- ] -->
-<!-- ``` -->
-<!---->
-<!-- This list will be put in front of the [list of default reporters](pytest_approval/definitions.py). -->
 
 ## Development
 
