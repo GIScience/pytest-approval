@@ -81,12 +81,13 @@ def verify(
 def verify_binary(
     data: bytes,
     *,
-    extension: str,
+    extension: str,  # TODO use extensions from BINARY_EXTENSIONS
     report_always: bool = False,
 ) -> bool:
     return _verify(
         data,
         extension,
+        binary=True,
         report_always=report_always,
         compare=compare_files,
     )
@@ -108,12 +109,16 @@ def verify_image(
         return _verify(
             data,
             extension,
+            binary=True,
+            image=True,
             report_always=report_always,
             compare=compare_image_contents_only,
         )
     return _verify(
         data,
         extension,
+        binary=True,
+        image=True,
         report_always=report_always,
         compare=compare_files,
     )
@@ -244,23 +249,28 @@ def _verify(
     extension: str,
     *,
     binary: bool = False,
+    image: bool = False,
+    pdf: bool = False,
     report_always: bool = False,
     report_suppress: bool = False,
     auto_approve: bool = False,
-    compare: Callable = compare_files,
+    compare: Callable = compare_text,
     scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ) -> bool:
     received = get_filepath(extension=".received" + extension, directory=APPROVALS_DIR)
     approved = get_filepath(extension=".approved" + extension, directory=APPROVALS_DIR)
-    _write(data, received, approved, scrub)
+    _write(data, received, approved, binary, scrub)
+
     if AUTO_APPROVE or auto_approve:
         shutil.copyfile(received, approved)
-    if compare(received, approved) and not report_always:
+
+    comparison = compare(received, approved)
+    if comparison and not report_always:
         received.unlink()
         return True
     else:
         if not report_suppress:
-            _report(received, approved)
+            _report(received, approved, binary, image, pdf)
         if compare(received, approved):
             received.unlink()
             return True
@@ -274,12 +284,13 @@ def _write(
     data,
     received: Path,
     approved: Path,
+    binary: bool,
     scrub: Callable[[str], str] | tuple[Callable[[str], str], ...] | None = None,
 ):
     """Write received to disk and create empty approved file if not exists."""
     received.parent.mkdir(exist_ok=True, parents=True)
     approved.parent.mkdir(exist_ok=True, parents=True)
-    if received.suffix in BINARY_EXTENSIONS:
+    if binary:
         _write_binary(data, received, approved)
     else:
         _write_text(data, received, approved, scrub)
@@ -322,10 +333,14 @@ def _write_text(
         approved.touch()
 
 
-def _report(received: Path, approved: Path):
+def _report(received: Path, approved: Path, binary: bool, image: bool, pdf: bool):
     if is_continuous_environment():
         reporters = {"diff": REPORTERS["diff"]}
-    elif received.suffix in BINARY_EXTENSIONS:
+    elif image:
+        reporters = {k: v for k, v in REPORTERS.items() if v["image"]}
+    elif pdf:
+        reporters = {k: v for k, v in REPORTERS.items() if v["pdf"]}
+    elif binary:
         reporters = {k: v for k, v in REPORTERS.items() if v["binary"]}
     else:
         reporters = REPORTERS

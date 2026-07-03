@@ -15,6 +15,8 @@ REPORTERS = {
             ]
         ],
         "binary": False,
+        "image": False,
+        "pdf": False,
     },
     "pycharm": {
         "commands": [
@@ -80,7 +82,9 @@ REPORTERS = {
             # TODO: https://snapcraft.io/pycharm
             # TODO: https://www.jetbrains.com/help/pycharm/working-with-the-ide-features-from-command-line.html#toolbox
         ],
-        "binary": True,
+        "binary": False,
+        "image": True,
+        "pdf": True,
     },
     "code": {
         "commands": [
@@ -117,7 +121,9 @@ REPORTERS = {
                 "%approved",
             ],
         ],
-        "binary": True,
+        "binary": False,
+        "image": True,
+        "pdf": True,
     },
     "diff": {
         "commands": [
@@ -135,58 +141,19 @@ REPORTERS = {
             ],
         ],
         "binary": True,  # used as fallback reporter
+        "image": True,
+        "pdf": True,
     },
 }
 
+# Supported binary extensions.
+# Support depends on an empty file being present.
 BINARY_EXTENSIONS: list[str] = [
-    # "7z",
-    # "7zip",
-    # "avif",
-    # "bmp",
-    # "bz2",
-    # "bzip2",
-    # "dds",
-    # "dib",
-    # "docx",
-    # "emf",
-    # "exif",
-    # "gif",
-    # "gz",
-    # "gzip",
-    # "heic",
-    # "heif",
-    # "ico",
-    # "j2c",
-    # "jfif",
-    # "jp2",
-    # "jpc",
-    # "jpe",
     ".jpeg",
     ".jpg",
-    # "jxr",
-    # "nupkg",
-    # "odp",
-    # "ods",
-    # "odt",
-    # "pbm",
-    # "pcx",
-    # "pdf",
-    # "pgm",
+    # ".parquet",
+    # ".pdf",
     ".png",
-    # "ppm",
-    # "pptx",
-    # "rle",
-    # "rtf",
-    # "tar",
-    # "tga",
-    # "tif",
-    # "tiff",
-    # "wdp",
-    # "webp",
-    # "wmp",
-    # "xlsx",
-    # "xz",
-    # "zip",
 ]
 
 CONFIG = _read_config()
