@@ -53,6 +53,20 @@ def test_verify_plotly_report_always_2():
     assert verify_plotly(FIG, report_always=True)
 
 
+def test_verify_plotly_not_approved_remove_image(monkeypatch: pytest.MonkeyPatch):
+    # Are the all files (.json and .png) removed even if no approval was given?
+    monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
+    filepath = get_filepath(directory="tests/approvals", count=False)
+
+    verify_plotly(FIG, remove_image=True)
+
+    assert not filepath.with_suffix(filepath.suffix + ".approved.png").exists()
+    assert not filepath.with_suffix(filepath.suffix + ".received.png").exists()
+
+    assert not filepath.with_suffix(filepath.suffix + ".approved.json").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.json").exists()
+
+
 def test_verify_plotly_not_approved(monkeypatch: pytest.MonkeyPatch):
     # Are the all files (.json and .png) removed even if no approval was given?
     monkeypatch.setattr("pytest_approval.main.REPORTERS", {"diff": REPORTERS["diff"]})
@@ -61,7 +75,7 @@ def test_verify_plotly_not_approved(monkeypatch: pytest.MonkeyPatch):
     verify_plotly(FIG)
 
     assert not filepath.with_suffix(filepath.suffix + ".approved.png").exists()
-    assert not filepath.with_suffix(filepath.suffix + ".received.png").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.png").exists()
 
     assert not filepath.with_suffix(filepath.suffix + ".approved.json").exists()
     assert filepath.with_suffix(filepath.suffix + ".received.json").exists()
@@ -79,7 +93,7 @@ def test_verify_plotly_two_calls_to_verify(monkeypatch):
     assert filepath.with_suffix(filepath.suffix + ".received.txt").exists()
 
     assert not filepath.with_suffix(filepath.suffix + ".approved.png").exists()
-    assert not filepath.with_suffix(filepath.suffix + ".received.png").exists()
+    assert filepath.with_suffix(filepath.suffix + ".received.png").exists()
 
     assert not filepath.with_suffix(filepath.suffix + ".approved.json").exists()
     assert filepath.with_suffix(filepath.suffix + ".received.json").exists()

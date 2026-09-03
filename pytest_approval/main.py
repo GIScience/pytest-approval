@@ -163,8 +163,9 @@ if PLOTLY_AVAILABLE:
         # TODO: Maybe support all plotly to_image formats?
         extension: Literal[".json"] = ".json",
         report_always: bool = False,
+        remove_image: bool = False,
     ) -> bool:
-        """Verify Plotly figure. Compare as JSON but report as image (.png).
+        """Verify Plotly figure. Compare as JSON but report as image (PNG).
 
         Depends on https://plotly.com/python/static-image-export/#install-dependencies
 
@@ -172,6 +173,7 @@ if PLOTLY_AVAILABLE:
             report_always: Always report even if received and approved are equal.
                 The approved image does not exist. Only the received image is reported.
                 To pass the verification approval needs to be given again.
+            remove_image: Wether to remove or keep the image after reporting.
         """
         if isinstance(data, dict):
             data = Figure(data)
@@ -181,7 +183,7 @@ if PLOTLY_AVAILABLE:
         data_json = data.to_json()
 
         # First verify JSON without reporting (Compare JSON)
-        success = _verify(data_json, extension=".json", report_suppress=True)
+        success = _verify(data_json, extension=extension, report_suppress=True)
         if (success and not report_always) or is_continuous_environment():
             return success
 
@@ -195,10 +197,11 @@ if PLOTLY_AVAILABLE:
         )
 
         # Remove images
-        path = get_filepath(count=False, directory=APPROVALS_DIR)
-        filename = path.name
-        directory = path.parent
-        [file.unlink() for file in directory.glob(escape(filename) + "*.png")]
+        if remove_image:
+            path = get_filepath(count=False, directory=APPROVALS_DIR)
+            filename = path.name
+            directory = path.parent
+            [file.unlink() for file in directory.glob(escape(filename) + "*.png")]
 
         # Create approved file with Plotly JSON
         if success:
@@ -207,7 +210,7 @@ if PLOTLY_AVAILABLE:
             FILEPATHS.pop(-3)  # received.json
             _verify(
                 data_json,
-                extension=".json",
+                extension=extension,
                 report_suppress=True,
                 auto_approve=True,
             )
@@ -275,8 +278,16 @@ def _verify(
             received.unlink()
             return True
         else:
+            # Clean-up empty files
             if os.stat(approved).st_size == 0:
                 approved.unlink()
+            elif image or pdf:
+                empty = Path(BASE_DIR / "empty_files" / "empty").with_suffix(
+                    approved.suffix
+                )
+                if compare(empty, approved):
+                    approved.unlink()
+
             return False
 
 
