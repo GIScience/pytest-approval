@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.18.0
+
+* plotly: keep approved PNG. Optionally remove after reporting. (8e73599)
+* dependencies: bump uv build tools from below 0.12 to below 0.13 (89d2dce)
+* dependencies: run uv sync --all-groups --upgrade (5b55626)
+* verify-binary: support parquet files (8eef7e6)
+* empty-files: remove empty files which are not supported yet (427f459)
+* docs: make usage examples more concise (25ec110)
+
 ## 0.17.0
 
 * build: change source of `pytest_nodeid_to_filepath` to pypi (4de2498)
