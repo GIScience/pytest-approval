@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.18.1
+
+* tests: re-approve plotly report always in CI test (8fad617)
+* ci/jenkins: set CI environment variable to conditionally skip tests (fb2be34)
+
 ## 0.18.0
 
 * plotly: keep approved PNG. Optionally remove after reporting. (8e73599)
