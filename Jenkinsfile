@@ -46,6 +46,23 @@ pipeline {
             }
         }
 
+        stage('Vulnerability Scan') {
+            environment {
+                VIRTUAL_ENV="${WORKSPACE}/.venv"
+                PATH="${VIRTUAL_ENV}/bin:${PATH}"
+            }
+            steps {
+                script {
+                    sh 'uv audit'
+                }
+            }
+            post {
+                failure {
+                  rocket_testfail()
+                }
+            }
+        }
+
         stage('Static analysis') {
             environment {
                 VIRTUAL_ENV="${WORKSPACE}/.venv"
